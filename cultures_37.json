@@ -1,0 +1,846 @@
+{
+  "Maïs": {
+    "eau_l_m2": 35,
+    "cycle_jours": 90,
+    "ph_min": 5.5,
+    "ph_max": 7.0,
+    "semis": "Avril-Mai, Juil-Août",
+    "engrais": "NPK 15-15-15 200kg/ha + Urée 100kg",
+    "irrigation_conseil": "2 arrosages/semaine si pluie <10mm",
+    "rendement_kg_ha": 2500,
+    "prix_fcfa_kg": 250,
+    "ravageurs": [
+      {
+        "nom": "Chenille légionnaire d'automne",
+        "cles": [
+          "trou",
+          "chenille",
+          "feuille rongée"
+        ],
+        "traitement": "Neem 50g/L + savon noir, 10L/ha au coeur de la plante",
+        "cout_evite": 15000
+      },
+      {
+        "nom": "Carence azote / excès d'eau",
+        "cles": [
+          "jaune",
+          "jaunisse"
+        ],
+        "traitement": "Compost + arrêt arrosage 3 jours, PAS de pesticide",
+        "cout_evite": 12000
+      }
+    ]
+  },
+  "Manioc": {
+    "eau_l_m2": 22,
+    "cycle_jours": 300,
+    "ph_min": 5.0,
+    "ph_max": 6.5,
+    "semis": "Mars-Juin",
+    "engrais": "Compost 5T/ha",
+    "irrigation_conseil": "1 arrosage/semaine en saison sèche",
+    "rendement_kg_ha": 12000,
+    "prix_fcfa_kg": 120,
+    "ravageurs": [
+      {
+        "nom": "Mosaïque africaine du manioc",
+        "cles": [
+          "mosaïque",
+          "tache",
+          "déformée"
+        ],
+        "traitement": "Arracher et brûler les plants atteints, boutures saines certifiées",
+        "cout_evite": 25000
+      }
+    ]
+  },
+  "Igname": {
+    "eau_l_m2": 30,
+    "cycle_jours": 270,
+    "ph_min": 5.5,
+    "ph_max": 6.5,
+    "semis": "Nov-Déc (buttage)",
+    "engrais": "Fumier 10T/ha + NPK 150kg/ha",
+    "irrigation_conseil": "Paillage + arrosage léger",
+    "rendement_kg_ha": 9000,
+    "prix_fcfa_kg": 300,
+    "ravageurs": [
+      {
+        "nom": "Anthracnose de l'igname",
+        "cles": [
+          "tache noire",
+          "pourri",
+          "noir"
+        ],
+        "traitement": "Retirer feuilles atteintes, cendre de bois sur pied, aérer",
+        "cout_evite": 20000
+      }
+    ]
+  },
+  "Riz": {
+    "eau_l_m2": 60,
+    "cycle_jours": 120,
+    "ph_min": 5.0,
+    "ph_max": 6.5,
+    "semis": "Juin-Juillet",
+    "engrais": "Urée fractionnée 150kg/ha",
+    "irrigation_conseil": "Lame d'eau 5cm en permanence",
+    "rendement_kg_ha": 3200,
+    "prix_fcfa_kg": 280,
+    "ravageurs": [
+      {
+        "nom": "Pyriculariose",
+        "cles": [
+          "tache brune",
+          "lésion",
+          "brûlure"
+        ],
+        "traitement": "Réduire azote, drainer 48h, fongicide bio si grave",
+        "cout_evite": 18000
+      }
+    ]
+  },
+  "Sorgho": {
+    "eau_l_m2": 30,
+    "cycle_jours": 110,
+    "ph_min": 5.5,
+    "ph_max": 7.0,
+    "semis": "Mai-Juin",
+    "engrais": "NPK 100kg/ha",
+    "irrigation_conseil": "2 fois/semaine si sec",
+    "rendement_kg_ha": 1400,
+    "prix_fcfa_kg": 220,
+    "ravageurs": [
+      {
+        "nom": "Charbon du sorgho",
+        "cles": [
+          "noir",
+          "poussière noire"
+        ],
+        "traitement": "Semences traitées, rotation culturale",
+        "cout_evite": 10000
+      }
+    ]
+  },
+  "Mil": {
+    "eau_l_m2": 28,
+    "cycle_jours": 100,
+    "ph_min": 5.5,
+    "ph_max": 7.0,
+    "semis": "Juin-Juillet",
+    "engrais": "NPK léger 50kg/ha",
+    "irrigation_conseil": "1-2 fois/semaine",
+    "rendement_kg_ha": 1000,
+    "prix_fcfa_kg": 300,
+    "ravageurs": [
+      {
+        "nom": "Mildiou du mil",
+        "cles": [
+          "jaune",
+          "duvet blanc"
+        ],
+        "traitement": "Espacer les plants, semences saines",
+        "cout_evite": 9000
+      }
+    ]
+  },
+  "Arachide": {
+    "eau_l_m2": 25,
+    "cycle_jours": 100,
+    "ph_min": 5.5,
+    "ph_max": 6.5,
+    "semis": "Avril-Mai",
+    "engrais": "NPK 100kg/ha au semis",
+    "irrigation_conseil": "1 fois/semaine",
+    "rendement_kg_ha": 1200,
+    "prix_fcfa_kg": 400,
+    "ravageurs": [
+      {
+        "nom": "Cercosporiose",
+        "cles": [
+          "tache brune",
+          "tache ronde"
+        ],
+        "traitement": "Rotation 3 ans, cendre de bois",
+        "cout_evite": 14000
+      }
+    ]
+  },
+  "Niébé": {
+    "eau_l_m2": 20,
+    "cycle_jours": 70,
+    "ph_min": 5.5,
+    "ph_max": 6.5,
+    "semis": "Juin-Juillet, Sept",
+    "engrais": "NPK léger 50kg/ha",
+    "irrigation_conseil": "1 fois/semaine",
+    "rendement_kg_ha": 900,
+    "prix_fcfa_kg": 350,
+    "ravageurs": [
+      {
+        "nom": "Puceron du niébé",
+        "cles": [
+          "puceron",
+          "déformée",
+          "collant"
+        ],
+        "traitement": "Neem 50g/L + savon noir",
+        "cout_evite": 11000
+      }
+    ]
+  },
+  "Soja": {
+    "eau_l_m2": 26,
+    "cycle_jours": 100,
+    "ph_min": 6.0,
+    "ph_max": 7.0,
+    "semis": "Juin-Juillet",
+    "engrais": "NPK 100kg/ha",
+    "irrigation_conseil": "1-2 fois/semaine",
+    "rendement_kg_ha": 1300,
+    "prix_fcfa_kg": 300,
+    "ravageurs": [
+      {
+        "nom": "Rouille du soja",
+        "cles": [
+          "rouille",
+          "pustule orange"
+        ],
+        "traitement": "Aérer les rangs, éviter excès azote",
+        "cout_evite": 13000
+      }
+    ]
+  },
+  "Coton": {
+    "eau_l_m2": 32,
+    "cycle_jours": 150,
+    "ph_min": 5.5,
+    "ph_max": 7.0,
+    "semis": "Juin",
+    "engrais": "NPK 200kg/ha + Urée",
+    "irrigation_conseil": "Arrêt 30j avant récolte",
+    "rendement_kg_ha": 1100,
+    "prix_fcfa_kg": 280,
+    "ravageurs": [
+      {
+        "nom": "Chenilles piqueuses-suceuses",
+        "cles": [
+          "trou",
+          "chenille",
+          "piqûre"
+        ],
+        "traitement": "Neem + savon noir 10L/ha, piégeage phéromone",
+        "cout_evite": 22000
+      }
+    ]
+  },
+  "Ananas": {
+    "eau_l_m2": 18,
+    "cycle_jours": 365,
+    "ph_min": 4.5,
+    "ph_max": 6.0,
+    "semis": "Toute saison (rejets)",
+    "engrais": "NPK riche K, 3 apports",
+    "irrigation_conseil": "1 fois/10 jours",
+    "rendement_kg_ha": 35000,
+    "prix_fcfa_kg": 200,
+    "ravageurs": [
+      {
+        "nom": "Pourriture du cœur",
+        "cles": [
+          "pourri",
+          "noir",
+          "mou"
+        ],
+        "traitement": "Drainer le sol, retirer plants atteints",
+        "cout_evite": 30000
+      }
+    ]
+  },
+  "Mangue": {
+    "eau_l_m2": 15,
+    "cycle_jours": 365,
+    "ph_min": 5.5,
+    "ph_max": 7.0,
+    "semis": "Récolte Mars-Juin",
+    "engrais": "Fumier + NPK à floraison",
+    "irrigation_conseil": "1 fois/10 jours en sec",
+    "rendement_kg_ha": 8000,
+    "prix_fcfa_kg": 200,
+    "ravageurs": [
+      {
+        "nom": "Anthracnose du manguier",
+        "cles": [
+          "tache noire",
+          "pourri"
+        ],
+        "traitement": "Tailler branches atteintes, aérer le houppier",
+        "cout_evite": 25000
+      }
+    ]
+  },
+  "Tomate": {
+    "eau_l_m2": 40,
+    "cycle_jours": 75,
+    "ph_min": 6.0,
+    "ph_max": 7.0,
+    "semis": "Sept-Oct, Fév-Mars",
+    "engrais": "NPK 150kg/ha + calcium",
+    "irrigation_conseil": "Goutte à goutte 2L/jour/plant",
+    "rendement_kg_ha": 15000,
+    "prix_fcfa_kg": 200,
+    "ravageurs": [
+      {
+        "nom": "Mildiou",
+        "cles": [
+          "tache brune",
+          "duvet",
+          "pourri"
+        ],
+        "traitement": "Espacer les plants, éviter arrosage foliaire, bouillie bordelaise bio",
+        "cout_evite": 20000
+      }
+    ]
+  },
+  "Piment": {
+    "eau_l_m2": 28,
+    "cycle_jours": 90,
+    "ph_min": 5.5,
+    "ph_max": 6.5,
+    "semis": "Toute saison",
+    "engrais": "NPK 120kg/ha",
+    "irrigation_conseil": "2 fois/semaine",
+    "rendement_kg_ha": 4500,
+    "prix_fcfa_kg": 600,
+    "ravageurs": [
+      {
+        "nom": "Flétrissement bactérien",
+        "cles": [
+          "flétri",
+          "fane",
+          "jaune"
+        ],
+        "traitement": "Arracher plants atteints, rotation, éviter excès eau",
+        "cout_evite": 18000
+      }
+    ]
+  },
+  "Gombo": {
+    "eau_l_m2": 30,
+    "cycle_jours": 60,
+    "ph_min": 5.5,
+    "ph_max": 6.8,
+    "semis": "Mars-Mai, Sept",
+    "engrais": "NPK 100kg/ha",
+    "irrigation_conseil": "2 fois/semaine",
+    "rendement_kg_ha": 6000,
+    "prix_fcfa_kg": 250,
+    "ravageurs": [
+      {
+        "nom": "Nématodes",
+        "cles": [
+          "racine",
+          "galle",
+          "chétif"
+        ],
+        "traitement": "Rotation culturale, compost, cendre de bois",
+        "cout_evite": 12000
+      }
+    ]
+  },
+  "Oignon": {
+    "eau_l_m2": 25,
+    "cycle_jours": 100,
+    "ph_min": 6.0,
+    "ph_max": 7.0,
+    "semis": "Oct-Nov",
+    "engrais": "NPK 150kg/ha",
+    "irrigation_conseil": "1 fois/semaine",
+    "rendement_kg_ha": 12000,
+    "prix_fcfa_kg": 300,
+    "ravageurs": [
+      {
+        "nom": "Mildiou de l'oignon",
+        "cles": [
+          "duvet",
+          "tache",
+          "jaune"
+        ],
+        "traitement": "Espacer, éviter excès humidité foliaire",
+        "cout_evite": 16000
+      }
+    ]
+  },
+  "Carotte": {
+    "eau_l_m2": 22,
+    "cycle_jours": 90,
+    "ph_min": 6.0,
+    "ph_max": 6.8,
+    "semis": "Oct-Déc",
+    "engrais": "NPK 100kg/ha",
+    "irrigation_conseil": "1 fois/semaine",
+    "rendement_kg_ha": 15000,
+    "prix_fcfa_kg": 250,
+    "ravageurs": [
+      {
+        "nom": "Alternariose",
+        "cles": [
+          "tache noire",
+          "brûlure"
+        ],
+        "traitement": "Rotation, éviter excès azote",
+        "cout_evite": 11000
+      }
+    ]
+  },
+  "Patate douce": {
+    "eau_l_m2": 20,
+    "cycle_jours": 120,
+    "ph_min": 5.5,
+    "ph_max": 6.5,
+    "semis": "Mars-Juin",
+    "engrais": "NPK léger",
+    "irrigation_conseil": "1 fois/semaine",
+    "rendement_kg_ha": 10000,
+    "prix_fcfa_kg": 150,
+    "ravageurs": [
+      {
+        "nom": "Charançon de la patate douce",
+        "cles": [
+          "trou",
+          "galerie",
+          "chenille"
+        ],
+        "traitement": "Buttage régulier, rotation, pièges à phéromone",
+        "cout_evite": 14000
+      }
+    ]
+  },
+  "Banane": {
+    "eau_l_m2": 33,
+    "cycle_jours": 365,
+    "ph_min": 5.5,
+    "ph_max": 7.0,
+    "semis": "Toute saison (rejets)",
+    "engrais": "NPK riche K, apports réguliers",
+    "irrigation_conseil": "3 fois/semaine",
+    "rendement_kg_ha": 20000,
+    "prix_fcfa_kg": 200,
+    "ravageurs": [
+      {
+        "nom": "Cercosporiose noire",
+        "cles": [
+          "tache noire",
+          "strie"
+        ],
+        "traitement": "Retirer feuilles atteintes, espacer les pieds",
+        "cout_evite": 28000
+      }
+    ]
+  },
+  "Papaye": {
+    "eau_l_m2": 25,
+    "cycle_jours": 270,
+    "ph_min": 6.0,
+    "ph_max": 6.5,
+    "semis": "Toute saison",
+    "engrais": "NPK 200g/pied/trimestre",
+    "irrigation_conseil": "2 fois/semaine",
+    "rendement_kg_ha": 25000,
+    "prix_fcfa_kg": 180,
+    "ravageurs": [
+      {
+        "nom": "Virus de la mosaïque du papayer",
+        "cles": [
+          "mosaïque",
+          "déformée",
+          "jaune"
+        ],
+        "traitement": "Arracher plants atteints, lutter contre pucerons vecteurs",
+        "cout_evite": 22000
+      }
+    ]
+  },
+  "Palme": {
+    "eau_l_m2": 20,
+    "cycle_jours": 365,
+    "ph_min": 4.5,
+    "ph_max": 6.5,
+    "semis": "Récolte continue",
+    "engrais": "NPK + Mg annuel",
+    "irrigation_conseil": "1 fois/semaine jeunes plants",
+    "rendement_kg_ha": 4000,
+    "prix_fcfa_kg": 150,
+    "ravageurs": [
+      {
+        "nom": "Pourriture du bourgeon",
+        "cles": [
+          "pourri",
+          "cœur mort"
+        ],
+        "traitement": "Drainer, retirer tissus atteints, éviter blessures",
+        "cout_evite": 35000
+      }
+    ]
+  },
+  "Anacarde": {
+    "eau_l_m2": 15,
+    "cycle_jours": 365,
+    "ph_min": 5.0,
+    "ph_max": 6.5,
+    "semis": "Mai-Juin (jeunes plants)",
+    "engrais": "Fumier organique",
+    "irrigation_conseil": "1 fois/semaine jeunes plants",
+    "rendement_kg_ha": 700,
+    "prix_fcfa_kg": 600,
+    "ravageurs": [
+      {
+        "nom": "Anthracnose de l'anacardier",
+        "cles": [
+          "tache noire",
+          "pourri"
+        ],
+        "traitement": "Tailler, aérer le houppier",
+        "cout_evite": 20000
+      }
+    ]
+  },
+  "Karité": {
+    "eau_l_m2": 12,
+    "cycle_jours": 365,
+    "ph_min": 6.0,
+    "ph_max": 7.0,
+    "semis": "Récolte Mai-Août",
+    "engrais": "Aucun (arbre spontané)",
+    "irrigation_conseil": "Naturel, pas d'irrigation",
+    "rendement_kg_ha": 900,
+    "prix_fcfa_kg": 500,
+    "ravageurs": [
+      {
+        "nom": "Rouille des feuilles",
+        "cles": [
+          "rouille",
+          "tache orange"
+        ],
+        "traitement": "Laisser faire, arbre rustique, surveiller seulement",
+        "cout_evite": 5000
+      }
+    ]
+  },
+  "Teck": {
+    "eau_l_m2": 10,
+    "cycle_jours": 5475,
+    "ph_min": 5.5,
+    "ph_max": 7.0,
+    "semis": "Plantation Juin-Juillet",
+    "engrais": "Aucun (arbre forestier)",
+    "irrigation_conseil": "1 fois/semaine 1ère année",
+    "rendement_kg_ha": 15,
+    "prix_fcfa_kg": 15000,
+    "ravageurs": [
+      {
+        "nom": "Termites",
+        "cles": [
+          "termite",
+          "galerie",
+          "bois creux"
+        ],
+        "traitement": "Cendre de bois autour du pied, éviter blessures au tronc",
+        "cout_evite": 15000
+      }
+    ]
+  },
+  "Moringa": {
+    "eau_l_m2": 18,
+    "cycle_jours": 90,
+    "ph_min": 6.0,
+    "ph_max": 7.0,
+    "semis": "Toute saison",
+    "engrais": "Fumier organique",
+    "irrigation_conseil": "2 fois/semaine",
+    "rendement_kg_ha": 3000,
+    "prix_fcfa_kg": 400,
+    "ravageurs": [
+      {
+        "nom": "Pucerons",
+        "cles": [
+          "puceron",
+          "collant",
+          "déformée"
+        ],
+        "traitement": "Neem + savon noir",
+        "cout_evite": 9000
+      }
+    ]
+  },
+  "Sésame": {
+    "eau_l_m2": 20,
+    "cycle_jours": 90,
+    "ph_min": 5.5,
+    "ph_max": 6.8,
+    "semis": "Juin-Juillet",
+    "engrais": "NPK léger 50kg/ha",
+    "irrigation_conseil": "1 fois/semaine",
+    "rendement_kg_ha": 500,
+    "prix_fcfa_kg": 700,
+    "ravageurs": [
+      {
+        "nom": "Fusariose",
+        "cles": [
+          "flétri",
+          "fane",
+          "racine"
+        ],
+        "traitement": "Rotation culturale, semences saines",
+        "cout_evite": 10000
+      }
+    ]
+  },
+  "Voandzou": {
+    "eau_l_m2": 22,
+    "cycle_jours": 120,
+    "ph_min": 5.5,
+    "ph_max": 6.5,
+    "semis": "Mai-Juin",
+    "engrais": "Aucun (légumineuse)",
+    "irrigation_conseil": "1 fois/semaine",
+    "rendement_kg_ha": 800,
+    "prix_fcfa_kg": 350,
+    "ravageurs": [
+      {
+        "nom": "Pourriture racinaire",
+        "cles": [
+          "racine",
+          "pourri",
+          "flétri"
+        ],
+        "traitement": "Sol bien drainé, rotation",
+        "cout_evite": 10000
+      }
+    ]
+  },
+  "Fonio": {
+    "eau_l_m2": 25,
+    "cycle_jours": 90,
+    "ph_min": 5.5,
+    "ph_max": 6.8,
+    "semis": "Juin-Juillet",
+    "engrais": "NPK léger",
+    "irrigation_conseil": "1 fois/semaine",
+    "rendement_kg_ha": 700,
+    "prix_fcfa_kg": 450,
+    "ravageurs": [
+      {
+        "nom": "Rouille du fonio",
+        "cles": [
+          "rouille",
+          "tache orange"
+        ],
+        "traitement": "Semences saines, espacer les plants",
+        "cout_evite": 8000
+      }
+    ]
+  },
+  "Haricot": {
+    "eau_l_m2": 24,
+    "cycle_jours": 70,
+    "ph_min": 6.0,
+    "ph_max": 7.0,
+    "semis": "Sept, Mars",
+    "engrais": "NPK 80kg/ha",
+    "irrigation_conseil": "1 fois/semaine",
+    "rendement_kg_ha": 1000,
+    "prix_fcfa_kg": 400,
+    "ravageurs": [
+      {
+        "nom": "Anthracnose du haricot",
+        "cles": [
+          "tache noire",
+          "lésion"
+        ],
+        "traitement": "Semences saines, rotation, éviter excès eau",
+        "cout_evite": 12000
+      }
+    ]
+  },
+  "Chou": {
+    "eau_l_m2": 35,
+    "cycle_jours": 80,
+    "ph_min": 6.0,
+    "ph_max": 7.0,
+    "semis": "Oct-Déc",
+    "engrais": "NPK 150kg/ha",
+    "irrigation_conseil": "3 fois/semaine",
+    "rendement_kg_ha": 20000,
+    "prix_fcfa_kg": 200,
+    "ravageurs": [
+      {
+        "nom": "Chenille du chou",
+        "cles": [
+          "trou",
+          "chenille"
+        ],
+        "traitement": "Neem + savon noir, filet anti-insecte",
+        "cout_evite": 16000
+      }
+    ]
+  },
+  "Concombre": {
+    "eau_l_m2": 32,
+    "cycle_jours": 60,
+    "ph_min": 6.0,
+    "ph_max": 7.0,
+    "semis": "Toute saison",
+    "engrais": "NPK 100kg/ha",
+    "irrigation_conseil": "3 fois/semaine",
+    "rendement_kg_ha": 12000,
+    "prix_fcfa_kg": 200,
+    "ravageurs": [
+      {
+        "nom": "Oïdium",
+        "cles": [
+          "poudre blanche",
+          "duvet"
+        ],
+        "traitement": "Aérer les plants, éviter excès azote",
+        "cout_evite": 11000
+      }
+    ]
+  },
+  "Aubergine": {
+    "eau_l_m2": 30,
+    "cycle_jours": 90,
+    "ph_min": 5.5,
+    "ph_max": 6.8,
+    "semis": "Toute saison",
+    "engrais": "NPK 120kg/ha",
+    "irrigation_conseil": "2 fois/semaine",
+    "rendement_kg_ha": 15000,
+    "prix_fcfa_kg": 250,
+    "ravageurs": [
+      {
+        "nom": "Doryphore africain",
+        "cles": [
+          "trou",
+          "chenille",
+          "larve"
+        ],
+        "traitement": "Ramassage manuel, Neem + savon noir",
+        "cout_evite": 14000
+      }
+    ]
+  },
+  "Gingembre": {
+    "eau_l_m2": 26,
+    "cycle_jours": 240,
+    "ph_min": 5.5,
+    "ph_max": 6.5,
+    "semis": "Mars-Avril",
+    "engrais": "Fumier + NPK",
+    "irrigation_conseil": "2 fois/semaine",
+    "rendement_kg_ha": 8000,
+    "prix_fcfa_kg": 500,
+    "ravageurs": [
+      {
+        "nom": "Pourriture du rhizome",
+        "cles": [
+          "pourri",
+          "mou",
+          "noir"
+        ],
+        "traitement": "Sol bien drainé, éviter excès eau",
+        "cout_evite": 20000
+      }
+    ]
+  },
+  "Curcuma": {
+    "eau_l_m2": 24,
+    "cycle_jours": 240,
+    "ph_min": 5.5,
+    "ph_max": 6.5,
+    "semis": "Mars-Avril",
+    "engrais": "Fumier organique",
+    "irrigation_conseil": "2 fois/semaine",
+    "rendement_kg_ha": 7000,
+    "prix_fcfa_kg": 500,
+    "ravageurs": [
+      {
+        "nom": "Pourriture du rhizome",
+        "cles": [
+          "pourri",
+          "mou",
+          "noir"
+        ],
+        "traitement": "Sol bien drainé, rotation",
+        "cout_evite": 18000
+      }
+    ]
+  },
+  "Bissap": {
+    "eau_l_m2": 20,
+    "cycle_jours": 120,
+    "ph_min": 5.5,
+    "ph_max": 6.8,
+    "semis": "Juin-Juillet",
+    "engrais": "NPK léger",
+    "irrigation_conseil": "1 fois/semaine",
+    "rendement_kg_ha": 900,
+    "prix_fcfa_kg": 400,
+    "ravageurs": [
+      {
+        "nom": "Chenilles défoliatrices",
+        "cles": [
+          "trou",
+          "chenille",
+          "feuille rongée"
+        ],
+        "traitement": "Neem + savon noir",
+        "cout_evite": 10000
+      }
+    ]
+  },
+  "Baobab": {
+    "eau_l_m2": 8,
+    "cycle_jours": 365,
+    "ph_min": 6.0,
+    "ph_max": 7.5,
+    "semis": "Récolte Oct-Déc",
+    "engrais": "Aucun",
+    "irrigation_conseil": "Naturel, pas d'irrigation",
+    "rendement_kg_ha": 200,
+    "prix_fcfa_kg": 300,
+    "ravageurs": [
+      {
+        "nom": "Peu de maladies (arbre rustique)",
+        "cles": [
+          "tache",
+          "insecte"
+        ],
+        "traitement": "Surveillance simple, arbre très résistant",
+        "cout_evite": 3000
+      }
+    ]
+  },
+  "Citron": {
+    "eau_l_m2": 18,
+    "cycle_jours": 365,
+    "ph_min": 5.5,
+    "ph_max": 7.0,
+    "semis": "Récolte toute saison",
+    "engrais": "NPK + oligoéléments",
+    "irrigation_conseil": "2 fois/semaine",
+    "rendement_kg_ha": 10000,
+    "prix_fcfa_kg": 250,
+    "ravageurs": [
+      {
+        "nom": "Chancre citrique",
+        "cles": [
+          "tache liégeuse",
+          "croûte"
+        ],
+        "traitement": "Tailler et brûler les parties atteintes, désinfecter les outils",
+        "cout_evite": 22000
+      }
+    ]
+  }
+}

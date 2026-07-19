@@ -1,0 +1,8 @@
+# Le cœur de Grain d'Or (main.py + raisonnement.py + fon_audio.py) ne
+# dépend que de la bibliothèque standard Python : aucune installation requise.
+#
+# Ces deux paquets ne sont nécessaires que pour scraper_aic_fao.py
+# (récupération de prix de marché en ligne). Si tu n'utilises pas ce module,
+# tu peux ignorer ce fichier entièrement.
+requests>=2.31
+beautifulsoup4>=4.12

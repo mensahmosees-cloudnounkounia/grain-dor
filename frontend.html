@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grain d'Or — IA agricole du paysan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sand:#F2E9D8;
+    --sand-deep:#E7D9BC;
+    --card:#FBF6EC;
+    --soil:#6B4226;
+    --clay:#B5502C;
+    --clay-dark:#8F3D20;
+    --leaf:#4E7C4F;
+    --leaf-dark:#365C39;
+    --gold:#E3A93C;
+    --ink:#221A10;
+    --ink-soft:#5B4C39;
+    --root-bg1:#3A2A17;
+    --root-bg2:#1F1710;
+    --danger:#A6402D;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(circle at 15% 10%, #ffffff30, transparent 40%),
+      var(--sand);
+    background-image:
+      linear-gradient(var(--sand) 0%, var(--sand) 100%);
+    font-family:'Space Grotesk', sans-serif;
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:32px 16px 64px;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+
+  .page{
+    width:100%;
+    max-width:1100px;
+  }
+
+  .top-label{
+    text-align:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+  h1.brand{
+    text-align:center;
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:clamp(30px,5.4vw,48px);
+    margin:0 0 6px;
+    color:var(--ink);
+    letter-spacing:0.01em;
+    white-space:nowrap;
+  }
+  h1.brand span{color:var(--clay);}
+  @media (max-width:380px){
+    h1.brand{white-space:normal;}
+  }
+  .tagline{
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:15px;
+    max-width:520px;
+    margin:0 auto 36px;
+    line-height:1.5;
+  }
+
+  .frame-wrap{
+    display:flex;
+    justify-content:center;
+  }
+  .phone{
+    width:100%;
+    max-width:420px;
+    background:var(--card);
+    border-radius:34px;
+    border:1px solid #00000012;
+    box-shadow:0 30px 60px -20px rgba(34,26,16,0.35), 0 2px 0 #fff8 inset;
+    overflow:hidden;
+    position:relative;
+  }
+  .phone-notch{
+    height:26px;
+    background:var(--ink);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .phone-notch::after{
+    content:"";
+    width:70px;height:8px;
+    background:#0003;
+    border-radius:10px;
+  }
+
+  .status-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:12px 18px 6px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+  }
+  .offline-pill{
+    display:flex;align-items:center;gap:6px;
+    background:var(--leaf);
+    color:#fff;
+    padding:3px 10px 3px 8px;
+    border-radius:20px;
+    font-size:10.5px;
+    letter-spacing:0.04em;
+  }
+  .offline-dot{width:6px;height:6px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px #ffffff33;}
+
+  .screen{padding:6px 20px 24px;}
+
+  .app-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin:8px 0 18px;
+  }
+  .app-header h2{
+    font-family:'Fraunces', serif;
+    font-size:22px;
+    margin:0;
+    font-weight:600;
+  }
+  .lang-toggle{
+    display:flex;
+    background:var(--sand-deep);
+    border-radius:20px;
+    padding:3px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+  }
+  .lang-toggle button{
+    border:none;background:transparent;
+    padding:6px 10px;border-radius:16px;
+    cursor:pointer;color:var(--ink-soft);
+    font-family:inherit;font-size:11px;
+  }
+  .lang-toggle button.active{
+    background:var(--ink);color:#fff;
+  }
+
+  .mic-row{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background:linear-gradient(135deg, var(--clay), var(--clay-dark));
+    color:#fff;
+    padding:14px 16px;
+    border-radius:18px;
+    margin-bottom:20px;
+    cursor:pointer;
+    user-select:none;
+    box-shadow:0 10px 24px -10px rgba(181,80,44,0.6);
+  }
+  .mic-icon{
+    width:38px;height:38px;
+    border-radius:50%;
+    background:#ffffff26;
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;
+    flex:none;
+    position:relative;
+  }
+  .mic-icon.listening::before{
+    content:"";
+    position:absolute;
+    inset:-6px;
+    border-radius:50%;
+    border:2px solid #fff9;
+    animation:pulse 1.4s ease-out infinite;
+  }
+  @keyframes pulse{
+    0%{transform:scale(0.8);opacity:0.8;}
+    100%{transform:scale(1.6);opacity:0;}
+  }
+  .mic-text{flex:1;}
+  .mic-text .t1{font-weight:600;font-size:14.5px;}
+  .mic-text .t2{font-size:11.5px;opacity:0.85;margin-top:2px;}
+
+  .section-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin:22px 0 10px;
+  }
+
+  .crop-grid-wrap{
+    position:relative;
+  }
+  .crop-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:8px;
+    max-height:272px;
+    overflow-y:auto;
+    padding:2px 2px 4px;
+    scrollbar-width:thin;
+  }
+  .crop-grid::-webkit-scrollbar{width:5px;}
+  .crop-grid::-webkit-scrollbar-thumb{background:#00000022;border-radius:10px;}
+  .crop-grid-wrap::after{
+    content:"";
+    position:absolute;
+    left:0;right:6px;bottom:0;
+    height:22px;
+    background:linear-gradient(180deg, transparent, var(--card));
+    pointer-events:none;
+    border-radius:0 0 12px 12px;
+  }
+  .crop-count{
+    font-weight:400;
+    color:var(--ink-soft);
+    text-transform:none;
+    letter-spacing:0;
+  }
+  .crop-btn{
+    background:var(--card);
+    border:1.5px solid #00000014;
+    border-radius:14px;
+    padding:10px 4px 8px;
+    text-align:center;
+    cursor:pointer;
+    font-family:'Space Grotesk', sans-serif;
+    transition:border-color .15s, background .15s, transform .1s;
+  }
+  .crop-btn:active{transform:scale(0.96);}
+  .crop-btn .emoji{font-size:20px;display:block;margin-bottom:4px;}
+  .crop-btn .name{font-size:10.5px;color:var(--ink-soft);line-height:1.2;}
+  .crop-btn.selected{
+    border-color:var(--leaf);
+    background:#EAF2E7;
+  }
+  .crop-btn.selected .name{color:var(--leaf-dark);font-weight:600;}
+
+  .soil-row{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:8px;
+  }
+  .soil-btn{
+    padding:9px 8px;
+    border-radius:12px;
+    border:1.5px solid #00000014;
+    background:var(--card);
+    text-align:left;
+    cursor:pointer;
+    color:var(--ink-soft);
+  }
+  .soil-btn .sname{
+    display:block;
+    font-size:12px;
+    font-weight:600;
+    color:var(--ink);
+    margin-bottom:1px;
+  }
+  .soil-btn .shint{
+    display:block;
+    font-size:10px;
+    line-height:1.2;
+    color:var(--ink-soft);
+  }
+  .soil-btn.selected{
+    border-color:var(--gold);
+    background:#FCF1DA;
+  }
+  .soil-btn.selected .sname{color:var(--ink);}
+
+  .reason-btn{
+    width:100%;
+    margin-top:22px;
+    padding:15px;
+    border:none;
+    border-radius:16px;
+    background:var(--ink);
+    color:#fff;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600;
+    font-size:15px;
+    cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    transition:opacity .15s;
+  }
+  .reason-btn:disabled{opacity:0.5;cursor:not-allowed;}
+
+  /* ---- root/reasoning panel ---- */
+  .root-panel{
+    margin-top:20px;
+    border-radius:20px;
+    background:linear-gradient(180deg, var(--root-bg1), var(--root-bg2));
+    padding:18px 16px 20px;
+    position:relative;
+    overflow:hidden;
+    display:none;
+  }
+  .root-panel.show{display:block;animation:fadeIn .3s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+  .root-title{
+    color:#EBD9B8;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    margin-bottom:14px;
+    opacity:0.8;
+  }
+
+  .root-track{
+    position:relative;
+    padding-left:26px;
+  }
+  .root-line{
+    position:absolute;
+    left:9px;top:6px;bottom:6px;
+    width:2px;
+    background:#ffffff1f;
+  }
+  .root-line-fill{
+    position:absolute;
+    left:9px;top:6px;
+    width:2px;
+    background:linear-gradient(180deg, var(--gold), var(--leaf));
+    height:0%;
+    transition:height 0.6s ease;
+  }
+  .root-step{
+    position:relative;
+    padding:0 0 20px 0;
+    min-height:40px;
+  }
+  .root-node{
+    position:absolute;
+    left:-26px;top:0;
+    width:20px;height:20px;
+    border-radius:50%;
+    background:#ffffff14;
+    border:2px solid #ffffff33;
+    display:flex;align-items:center;justify-content:center;
+    font-size:10px;
+    color:#fff8;
+    transition:all .3s ease;
+    z-index:2;
+  }
+  .root-step.active .root-node{
+    background:var(--gold);
+    border-color:var(--gold);
+    color:#1F1710;
+    box-shadow:0 0 0 5px #E3A93C33;
+  }
+  .root-step.done .root-node{
+    background:var(--leaf);
+    border-color:var(--leaf);
+    color:#fff;
+  }
+  .root-step .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:#EBD9B899;
+    margin-bottom:3px;
+  }
+  .root-step .body{
+    color:#F5EBD8;
+    font-size:13px;
+    line-height:1.45;
+    opacity:0.35;
+    transition:opacity .3s ease;
+  }
+  .root-step.active .body,
+  .root-step.done .body{opacity:1;}
+
+  /* result bloom */
+  .bloom{
+    margin-top:6px;
+    background:var(--card);
+    border-radius:16px;
+    padding:16px;
+    display:none;
+  }
+  .bloom.show{display:block;animation:fadeIn .4s ease;}
+  .bloom-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    padding:8px 0;
+    border-bottom:1px solid #00000010;
+  }
+  .bloom-row:last-child{border-bottom:none;}
+  .bloom-row .k{font-size:12px;color:var(--ink-soft);}
+  .bloom-row .v{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13.5px;
+    font-weight:600;
+    text-align:right;
+  }
+  .v.pos{color:var(--leaf-dark);}
+  .v.warn{color:var(--clay-dark);}
+
+  .risk-tag{
+    display:inline-block;
+    margin-top:10px;
+    padding:5px 12px;
+    border-radius:20px;
+    font-size:11.5px;
+    font-weight:600;
+  }
+  .risk-tag.low{background:#E5F1E2;color:var(--leaf-dark);}
+  .risk-tag.med{background:#FCEFD9;color:#8A5A15;}
+  .risk-tag.high{background:#F7E1DC;color:var(--danger);}
+
+  .calendar-note{
+    margin-top:12px;
+    font-size:12.5px;
+    color:var(--ink-soft);
+    line-height:1.5;
+    background:var(--sand-deep);
+    padding:10px 12px;
+    border-radius:10px;
+  }
+
+  .weather-card{
+    margin-top:22px;
+    background:linear-gradient(120deg, #FCEFD9, #FBF6EC);
+    border:1px solid #E3A93C33;
+    border-radius:16px;
+    padding:14px 16px;
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+  }
+  .weather-card .ic{font-size:22px;}
+  .weather-card .txt .h{font-weight:600;font-size:13.5px;margin-bottom:3px;}
+  .weather-card .txt .p{font-size:12px;color:var(--ink-soft);line-height:1.5;}
+
+  .plots-card{
+    margin-top:16px;
+    background:var(--card);
+    border:1.5px dashed #00000022;
+    border-radius:16px;
+    padding:14px 16px;
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:12.5px;
+    cursor:pointer;
+  }
+  .plots-card b{color:var(--ink);}
+
+  .footer-note{
+    text-align:center;
+    margin-top:34px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+    opacity:0.7;
+    line-height:1.6;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="top-label">Concept d'interface — assistant agricole</div>
+  <h1 class="brand">GRAIN <span>D'OR</span></h1>
+  <p class="tagline">Un assistant pensé pour le paysan béninois.</p>
+
+  <div class="frame-wrap">
+    <div class="phone">
+      <div class="phone-notch"></div>
+      <div class="status-bar">
+        <span id="clock">08:42</span>
+        <div class="offline-pill"><span class="offline-dot"></span>Connecté — main.py</div>
+      </div>
+
+      <div class="screen">
+        <div class="app-header">
+          <h2>Bonjour 🌾</h2>
+          <div class="lang-toggle">
+            <button id="btn-fr" class="active" onclick="setLang('fr')">Français</button>
+            <button id="btn-fon" onclick="setLang('fon')">Fon</button>
+          </div>
+        </div>
+
+        <div class="mic-row" id="micRow" onclick="toggleMic()">
+          <div class="mic-icon" id="micIcon">🎙️</div>
+          <div class="mic-text">
+            <div class="t1" id="micTitle">Je t'écoute</div>
+            <div class="t2" id="micSub">Touche pour parler — Fon ou Français, sans internet</div>
+          </div>
+        </div>
+
+        <div class="section-label">1. Ta culture <span class="crop-count">— 37 cultures, fais défiler ↓</span></div>
+        <div class="crop-grid-wrap">
+          <div class="crop-grid" id="cropGrid"></div>
+        </div>
+
+        <div class="section-label">2. Ton sol</div>
+        <div class="soil-row" id="soilRow"></div>
+
+        <div class="section-label">3. Contexte</div>
+        <div class="soil-row" style="grid-template-columns:1fr 1fr;">
+          <div class="soil-btn" style="cursor:default;">
+            <span class="sname">Pluie prévue (mm)</span>
+            <input id="pluieInput" type="number" value="5" min="0" style="width:100%;border:none;background:transparent;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;color:var(--ink);padding:2px 0 0;">
+          </div>
+          <div class="soil-btn" style="cursor:default;">
+            <span class="sname">Surface (ha)</span>
+            <input id="surfaceInput" type="number" value="1" min="0.1" step="0.1" style="width:100%;border:none;background:transparent;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;color:var(--ink);padding:2px 0 0;">
+          </div>
+        </div>
+
+        <div class="section-label">4. Symptôme observé (optionnel)</div>
+        <input id="symptInput" type="text" placeholder="Ex: feuille jaune, trou, chenille, pourri"
+          style="width:100%;padding:10px 12px;margin:0 0 4px;border-radius:12px;border:1.5px solid #00000014;background:var(--card);font-family:'Space Grotesk',sans-serif;font-size:13px;color:var(--ink);box-sizing:border-box;">
+
+        <button class="reason-btn" id="reasonBtn" onclick="runReasoning()">🧠 Raisonner + Irriguer</button>
+
+        <div class="root-panel" id="rootPanel">
+          <div class="root-title">Raisonnement en 5 étapes</div>
+          <div class="root-track">
+            <div class="root-line"></div>
+            <div class="root-line-fill" id="rootFill"></div>
+            <div class="root-step" id="step1"><div class="root-node">1</div><div class="eyebrow">Intention</div><div class="body" id="s1body">—</div></div>
+            <div class="root-step" id="step2"><div class="root-node">2</div><div class="eyebrow">Contexte</div><div class="body" id="s2body">—</div></div>
+            <div class="root-step" id="step3"><div class="root-node">3</div><div class="eyebrow">Économie</div><div class="body" id="s3body">—</div></div>
+            <div class="root-step" id="step4"><div class="root-node">4</div><div class="eyebrow">Risque</div><div class="body" id="s4body">—</div></div>
+            <div class="root-step" id="step5"><div class="root-node">5</div><div class="eyebrow">Plan</div><div class="body" id="s5body">—</div></div>
+          </div>
+
+          <div class="bloom" id="bloom">
+            <div class="bloom-row"><span class="k">Irrigation conseillée</span><span class="v" id="rIrr">—</span></div>
+            <div class="bloom-row"><span class="k">Coût eau</span><span class="v warn" id="rCost">—</span></div>
+            <div class="bloom-row"><span class="k">Bénéfice estimé / ha</span><span class="v pos" id="rBenef">—</span></div>
+            <div class="bloom-row"><span class="k">Rendement attendu</span><span class="v" id="rYield">—</span></div>
+            <span class="risk-tag" id="rRisk">—</span>
+            <div class="calendar-note" id="rCal">—</div>
+          </div>
+        </div>
+
+        <div class="weather-card">
+          <div class="ic">🌪️</div>
+          <div class="txt">
+            <div class="h">Alerte météo — Atlantique</div>
+            <div class="p">Pluie forte attendue &gt;40mm demain. Creuse des rigoles d'évacuation ce soir si ta parcelle est en pente.</div>
+          </div>
+        </div>
+
+        <div class="plots-card" onclick="alert('Démo : ouvrirait la liste de tes parcelles enregistrées, stockées hors ligne sur le téléphone.')">
+          📦 <b>Voir mes parcelles</b> — 3 enregistrées, tout hors ligne
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p class="footer-note">Version branchée sur le vrai backend (main.py + raisonnement.py + cultures_37.json).<br>Les calculs sont réels, pas simulés — mais ils passent par ce serveur, ce n'est plus 100% hors ligne.</p>
+</div>
+
+<script>
+const CROPS = {
+  mais:      {emoji:'🌽', fr:'Maïs', fon:'Gbadé', water:35, yield:2500, price:250, disease:'Chenille légionnaire', fert:'NPK 15-15-15 200kg/ha + Urée 100kg', sow:'Avril-Mai, Juil-Août', cycle:90},
+  manioc:    {emoji:'🥔', fr:'Manioc', fon:'Agbeli', water:22, yield:12000, price:120, disease:'Mosaïque africaine', fert:'NPK 100kg/ha au buttage', sow:'Mars-Juin', cycle:300},
+  igname:    {emoji:'🍠', fr:'Igname', fon:'Kúsu', water:30, yield:9000, price:300, disease:'Anthracnose', fert:'Fumier + NPK 150kg/ha', sow:'Nov-Déc (buttage)', cycle:270},
+  riz:       {emoji:'🌾', fr:'Riz', fon:'Málì', water:60, yield:3200, price:280, disease:'Pyriculariose', fert:'Urée fractionnée 150kg/ha', sow:'Juin-Juillet', cycle:120},
+  sorgho:    {emoji:'🌿', fr:'Sorgho', fon:'Blě', water:30, yield:1400, price:220, disease:'Charbon du sorgho', fert:'NPK 100kg/ha', sow:'Mai-Juin', cycle:110},
+  mil:       {emoji:'🌾', fr:'Mil', fon:'Mil', water:28, yield:1000, price:300, disease:'Mildiou du mil', fert:'NPK léger 50kg/ha', sow:'Juin-Juillet', cycle:100},
+  arachide:  {emoji:'🥜', fr:'Arachide', fon:'Azìn', water:25, yield:1200, price:400, disease:'Cercosporiose', fert:'NPK 100kg/ha au semis', sow:'Avril-Mai', cycle:100},
+  niebe:     {emoji:'🫘', fr:'Niébé', fon:'Niébé', water:20, yield:900, price:350, disease:'Puceron du niébé', fert:'NPK léger 50kg/ha', sow:'Juin-Juillet, Sept', cycle:70},
+  soja:      {emoji:'🫛', fr:'Soja', fon:'Soja', water:26, yield:1300, price:300, disease:'Rouille du soja', fert:'NPK 100kg/ha', sow:'Juin-Juillet', cycle:100},
+  coton:     {emoji:'☁️', fr:'Coton', fon:'Kolò', water:32, yield:1100, price:280, disease:'Chenilles piqueuses', fert:'NPK 200kg/ha', sow:'Juin', cycle:150},
+  ananas:    {emoji:'🍍', fr:'Ananas', fon:'Agban', water:18, yield:35000, price:200, disease:'Pourriture du cœur', fert:'NPK riche K, 3 apports', sow:'Toute saison (rejets)', cycle:365},
+  mangue:    {emoji:'🥭', fr:'Mangue', fon:'Mangue', water:15, yield:8000, price:200, disease:'Anthracnose du manguier', fert:'Fumier + NPK à floraison', sow:'Récolte Mars-Juin', cycle:365},
+  tomate:    {emoji:'🍅', fr:'Tomate', fon:'Tomati', water:40, yield:15000, price:200, disease:'Mildiou', fert:'NPK 150kg/ha + calcium', sow:'Sept-Oct, Fév-Mars', cycle:75},
+  piment:    {emoji:'🌶️', fr:'Piment', fon:'Takín', water:28, yield:4500, price:600, disease:'Flétrissement bactérien', fert:'NPK 120kg/ha', sow:'Toute saison', cycle:90},
+  gombo:     {emoji:'🫒', fr:'Gombo', fon:'Gombo', water:30, yield:6000, price:250, disease:'Nématodes', fert:'NPK 100kg/ha', sow:'Mars-Mai, Sept', cycle:60},
+  oignon:    {emoji:'🧅', fr:'Oignon', fon:'Oignon', water:25, yield:12000, price:300, disease:'Mildiou de l\'oignon', fert:'NPK 150kg/ha', sow:'Oct-Nov', cycle:100},
+  carotte:   {emoji:'🥕', fr:'Carotte', fon:'Carotte', water:22, yield:15000, price:250, disease:'Alternariose', fert:'NPK 100kg/ha', sow:'Oct-Déc', cycle:90},
+  patate:    {emoji:'🍠', fr:'Patate douce', fon:'Patate douce', water:20, yield:10000, price:150, disease:'Charançon de la patate douce', fert:'NPK léger', sow:'Mars-Juin', cycle:120},
+  banane:    {emoji:'🍌', fr:'Banane', fon:'Banane', water:33, yield:20000, price:200, disease:'Cercosporiose noire', fert:'NPK riche K, apports réguliers', sow:'Toute saison (rejets)', cycle:365},
+  papaye:    {emoji:'🍈', fr:'Papaye', fon:'Papaye', water:25, yield:25000, price:180, disease:'Virus de la mosaïque du papayer', fert:'NPK 200g/pied/trimestre', sow:'Toute saison', cycle:270},
+  palme:     {emoji:'🌴', fr:'Palme', fon:'Palme', water:20, yield:4000, price:150, disease:'Pourriture du bourgeon', fert:'NPK + Mg annuel', sow:'Récolte continue', cycle:365},
+  anacarde:  {emoji:'🌰', fr:'Anacarde', fon:'Kásu', water:15, yield:700, price:600, disease:'Anthracnose', fert:'Fumier organique', sow:'Mai-Juin (jeunes plants)', cycle:365},
+  karite:    {emoji:'🌳', fr:'Karité', fon:'Kpakpo', water:12, yield:900, price:500, disease:'Rouille des feuilles', fert:'Aucun (arbre spontané)', sow:'Récolte Mai-Août', cycle:365},
+  teck:      {emoji:'🌲', fr:'Teck', fon:'Teck', water:10, yield:15, price:15000, disease:'Termites', fert:'Aucun (arbre forestier)', sow:'Plantation Juin-Juillet', cycle:5475},
+  moringa:   {emoji:'🍃', fr:'Moringa', fon:'Moringa', water:18, yield:3000, price:400, disease:'Pucerons', fert:'Fumier organique', sow:'Toute saison', cycle:90},
+  sesame:    {emoji:'🌾', fr:'Sésame', fon:'Sésame', water:20, yield:500, price:700, disease:'Fusariose', fert:'NPK léger 50kg/ha', sow:'Juin-Juillet', cycle:90},
+  voandzou:  {emoji:'🫘', fr:'Voandzou', fon:'Voandzou', water:22, yield:800, price:350, disease:'Pourriture racinaire', fert:'Aucun (légumineuse)', sow:'Mai-Juin', cycle:120},
+  fonio:     {emoji:'🌾', fr:'Fonio', fon:'Fonio', water:25, yield:700, price:450, disease:'Rouille du fonio', fert:'NPK léger', sow:'Juin-Juillet', cycle:90},
+  haricot:   {emoji:'🫘', fr:'Haricot', fon:'Haricot', water:24, yield:1000, price:400, disease:'Anthracnose du haricot', fert:'NPK 80kg/ha', sow:'Sept, Mars', cycle:70},
+  chou:      {emoji:'🥬', fr:'Chou', fon:'Chou', water:35, yield:20000, price:200, disease:'Chenille du chou', fert:'NPK 150kg/ha', sow:'Oct-Déc', cycle:80},
+  concombre: {emoji:'🥒', fr:'Concombre', fon:'Concombre', water:32, yield:12000, price:200, disease:'Oïdium', fert:'NPK 100kg/ha', sow:'Toute saison', cycle:60},
+  aubergine: {emoji:'🍆', fr:'Aubergine', fon:'Aubergine', water:30, yield:15000, price:250, disease:'Doryphore africain', fert:'NPK 120kg/ha', sow:'Toute saison', cycle:90},
+  gingembre: {emoji:'🫚', fr:'Gingembre', fon:'Gingembre', water:26, yield:8000, price:500, disease:'Pourriture du rhizome', fert:'Fumier + NPK', sow:'Mars-Avril', cycle:240},
+  curcuma:   {emoji:'🟠', fr:'Curcuma', fon:'Curcuma', water:24, yield:7000, price:500, disease:'Pourriture du rhizome', fert:'Fumier organique', sow:'Mars-Avril', cycle:240},
+  bissap:    {emoji:'🌺', fr:'Bissap', fon:'Bissap', water:20, yield:900, price:400, disease:'Chenilles défoliatrices', fert:'NPK léger', sow:'Juin-Juillet', cycle:120},
+  baobab:    {emoji:'🌳', fr:'Baobab', fon:'Baobab', water:8, yield:200, price:300, disease:'Peu de maladies (rustique)', fert:'Aucun', sow:'Récolte Oct-Déc', cycle:365},
+  citron:    {emoji:'🍋', fr:'Citron', fon:'Citron', water:18, yield:10000, price:250, disease:'Chancre citrique', fert:'NPK + oligoéléments', sow:'Récolte toute saison', cycle:365},
+};
+const SOILS = {
+  argileux:   {fr:'Argileux', mult:0.7,  note:'Retient bien l\'eau'},
+  sableux:    {fr:'Sableux', mult:1.25, note:'Draine vite, sèche fort'},
+  limoneux:   {fr:'Limoneux', mult:1.0,  note:'Équilibré, idéal'},
+  barre:      {fr:'Terre de barre', mult:0.85, note:'Plateau sud, ferralitique'},
+  ferrugineux:{fr:'Ferrugineux', mult:1.1,  note:'Nord, croûte en surface'},
+  hydromorphe:{fr:'Bas-fond', mult:0.55, note:'Zone humide, vallées'},
+  sabloargil: {fr:'Sablo-argileux', mult:0.95, note:'Mixte, bon compromis'},
+  vertisol:   {fr:'Sol noir', mult:0.75, note:'Vertisol, craquelle au sec'},
+  rouge:      {fr:'Terre rouge', mult:1.05, note:'Latérite, riche en fer'},
+  grain:      {fr:'Terre à grain', mult:1.35, note:'Graveleuse, draine très vite'},
+};
+
+// Correspondance clé frontend -> clé exacte attendue par raisonnement.py (backend)
+const BACKEND_CROP = {
+  mais:'Maïs', manioc:'Manioc', igname:'Igname', riz:'Riz', sorgho:'Sorgho', mil:'Mil',
+  arachide:'Arachide', niebe:'Niébé', soja:'Soja', coton:'Coton', ananas:'Ananas',
+  mangue:'Mangue', tomate:'Tomate', piment:'Piment', gombo:'Gombo', oignon:'Oignon',
+  carotte:'Carotte', patate:'Patate douce', banane:'Banane', papaye:'Papaye', palme:'Palme',
+  anacarde:'Anacarde', karite:'Karité', teck:'Teck', moringa:'Moringa', sesame:'Sésame',
+  voandzou:'Voandzou', fonio:'Fonio', haricot:'Haricot', chou:'Chou', concombre:'Concombre',
+  aubergine:'Aubergine', gingembre:'Gingembre', curcuma:'Curcuma', bissap:'Bissap',
+  baobab:'Baobab', citron:'Citron',
+};
+const BACKEND_SOIL = {
+  argileux:'argileux', sableux:'sableux', limoneux:'limoneux', barre:'terre_de_barre',
+  ferrugineux:'ferrugineux', hydromorphe:'bas_fond', sabloargil:'sablo_argileux',
+  vertisol:'sol_noir', rouge:'terre_rouge', grain:'terre_a_grain',
+};
+
+let lang='fr', selectedCrop='mais', selectedSoil='argileux', listening=false;
+
+function buildGrid(){
+  const grid=document.getElementById('cropGrid');
+  grid.innerHTML='';
+  Object.entries(CROPS).forEach(([key,c])=>{
+    const btn=document.createElement('div');
+    btn.className='crop-btn'+(key===selectedCrop?' selected':'');
+    btn.innerHTML=`<span class="emoji">${c.emoji}</span><span class="name">${lang==='fon'?c.fon:c.fr}</span>`;
+    btn.onclick=()=>{selectedCrop=key; buildGrid(); hideResults();};
+    grid.appendChild(btn);
+  });
+}
+function buildSoil(){
+  const row=document.getElementById('soilRow');
+  row.innerHTML='';
+  Object.entries(SOILS).forEach(([key,s])=>{
+    const btn=document.createElement('div');
+    btn.className='soil-btn'+(key===selectedSoil?' selected':'');
+    btn.innerHTML=`<span class="sname">${s.fr}</span><span class="shint">${s.note}</span>`;
+    btn.onclick=()=>{selectedSoil=key; buildSoil(); hideResults();};
+    row.appendChild(btn);
+  });
+}
+function setLang(l){
+  lang=l;
+  document.getElementById('btn-fr').classList.toggle('active', l==='fr');
+  document.getElementById('btn-fon').classList.toggle('active', l==='fon');
+  document.getElementById('micTitle').textContent = l==='fon' ? 'Un se we' : "Je t'écoute";
+  document.getElementById('micSub').textContent = l==='fon' ? 'Dá xó dó Fɔngbe alo Fransegbe — kún internet ɔ ɖ' : 'Touche pour parler — Fon ou Français, sans internet';
+  buildGrid();
+}
+function toggleMic(){
+  listening=!listening;
+  document.getElementById('micIcon').classList.toggle('listening', listening);
+  document.getElementById('micTitle').textContent = listening ? (lang==='fon'?'Un se we...':'Écoute en cours...') : (lang==='fon'?'Un se we':"Je t'écoute");
+  if(listening){
+    setTimeout(()=>{
+      if(listening){toggleMic();}
+    },2200);
+  }
+}
+function hideResults(){
+  document.getElementById('rootPanel').classList.remove('show');
+  document.getElementById('bloom').classList.remove('show');
+  ['step1','step2','step3','step4','step5'].forEach(id=>{
+    document.getElementById(id).classList.remove('active','done');
+  });
+  document.getElementById('rootFill').style.height='0%';
+}
+
+async function runReasoning(){
+  const btn=document.getElementById('reasonBtn');
+  btn.disabled=true;
+  hideResults();
+  const panel=document.getElementById('rootPanel');
+  panel.classList.add('show');
+
+  const c=CROPS[selectedCrop];
+  const cropNomBackend = BACKEND_CROP[selectedCrop];
+  const solBackend = BACKEND_SOIL[selectedSoil];
+  const pluie = document.getElementById('pluieInput').value || 5;
+  const surface = document.getElementById('surfaceInput').value || 1;
+  const sympt = document.getElementById('symptInput').value || '';
+
+  const params = new URLSearchParams({
+    culture: cropNomBackend,
+    sol: solBackend,
+    pluie: pluie,
+    surface: surface,
+    sympt: sympt,
+  });
+
+  let data;
+  try{
+    const res = await fetch(`/api/raisonner?${params.toString()}`);
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    data = await res.json();
+    if(data.erreur) throw new Error(data.erreur);
+  }catch(err){
+    // Pas de faux résultat en cas d'échec : on le dit clairement.
+    document.getElementById('s1body').textContent =
+      "⚠️ Impossible de joindre le serveur Grain d'Or (raisonnement.py). " +
+      "Vérifie que main.py tourne et que cette page est bien servie par lui, sur le même domaine.";
+    document.getElementById('step1').classList.add('active');
+    document.getElementById('rootFill').style.height='20%';
+    btn.disabled=false;
+    console.error(err);
+    return;
+  }
+
+  const irrigation = data['3_economie'].irrigation;
+  const benefice = data['3_economie'].benefice;
+  const risqueMeteo = data['4_risque'].meteo;
+  const diagnostic = data['4_risque'].diagnostic;
+  const plan = data['5_plan'];
+  const contexte = data['2_contexte'];
+
+  const steps = [
+    {id:'step1', text:`Objectif sur ${c.fr}, sol ${SOILS[selectedSoil].fr.toLowerCase()}, ${surface}ha.`},
+    {id:'step2', text: contexte.message},
+    {id:'step3', text: `${irrigation.message} ${benefice.message}`},
+    {id:'step4', text: `${risqueMeteo.message}${diagnostic ? ' ' + diagnostic.message : ''}`},
+    {id:'step5', text: plan.message},
+  ];
+
+  let i=0;
+  function nextStep(){
+    if(i>0){
+      document.getElementById(steps[i-1].id).classList.remove('active');
+      document.getElementById(steps[i-1].id).classList.add('done');
+    }
+    if(i<steps.length){
+      const el=document.getElementById(steps[i].id);
+      el.classList.add('active');
+      document.getElementById(steps[i].id.replace('step','s')+'body').textContent = steps[i].text;
+      document.getElementById('rootFill').style.height = `${((i+1)/steps.length)*100}%`;
+      i++;
+      setTimeout(nextStep, 550);
+    } else {
+      showBloom({irrigation, benefice, risqueMeteo, diagnostic, plan});
+      btn.disabled=false;
+    }
+  }
+  nextStep();
+}
+
+function fmtFcfa(n){
+  return Math.round(n).toLocaleString('fr-FR').replace(/\u00A0/g,' ') + ' F';
+}
+
+function showBloom(d){
+  const irr = d.irrigation;
+  document.getElementById('rIrr').textContent = irr.action === 'stop'
+    ? '0 (pluie suffisante)'
+    : `${irr.dose_litres_m2} litres/m²`;
+  document.getElementById('rCost').textContent = irr.action === 'stop'
+    ? `économisé ${fmtFcfa(irr.economie_fcfa)}`
+    : fmtFcfa(irr.cout_fcfa);
+  document.getElementById('rBenef').textContent = fmtFcfa(d.benefice.benefice_net_fcfa) + ' net';
+  document.getElementById('rYield').textContent = `${d.benefice.rendement_kg.toLocaleString('fr-FR')} kg`;
+
+  const tag=document.getElementById('rRisk');
+  const niveau = d.risqueMeteo.niveau; // faible / modéré / élevé
+  const cls = niveau === 'élevé' ? 'high' : (niveau === 'modéré' ? 'med' : 'low');
+  const nomRisque = d.diagnostic && d.diagnostic.trouve ? d.diagnostic.nom : 'RAS';
+  tag.textContent = `Risque ${niveau} — ${nomRisque}`;
+  tag.className = 'risk-tag ' + cls;
+
+  document.getElementById('rCal').textContent = `📅 ${d.plan.message}`;
+  document.getElementById('bloom').classList.add('show');
+}
+
+function tickClock(){
+  const now=new Date();
+  document.getElementById('clock').textContent = now.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+}
+tickClock();
+setInterval(tickClock, 30000);
+
+buildGrid();
+buildSoil();
+</script>
+</body>
+</html>
