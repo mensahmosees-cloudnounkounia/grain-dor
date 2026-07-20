@@ -18,7 +18,23 @@
           "feuille rongée"
         ],
         "traitement": "Neem 50g/L + savon noir, 10L/ha au coeur de la plante",
-        "cout_evite": 15000
+        "cout_evite": 15000,
+        "savoir_paysan": [
+          "Mettre du sable au cœur de la plante (au sommet, là où la chenille se cache).",
+          "Feuille de papaye bien triturée, filtrer et pulvériser l'eau obtenue.",
+          "Piment écrasé + feuilles et graines de neem + feuilles de jatropha (2 variétés) + ail + gingembre, piler et mélanger à l'eau, pulvériser le soir.",
+          "Solution aqueuse de feuilles d'hyptis + piment : très efficace, à appliquer tôt le matin ou tard le soir.",
+          "Urine fermentée (humaine ou de lapin) mélangée à de la cendre de bois.",
+          "Eau savonneuse (savon Palmida de préférence) filtrée avec du neem trituré, ou du chromolena (Eupatorium) trituré, pulvériser. Si les pluies sont abondantes, pas besoin : la pluie réduit fortement les dégâts.",
+          "Cendre de bois + coquilles d'œufs écrasées, à déposer au pied du maïs.",
+          "Feuilles de neem ou de marguerite bien triturées, pulvériser la nuit — c'est la nuit que la chenille mange le plus.",
+          "Sable + piment + tabac, appliqué plante par plante (efficace mais demande du temps si le champ est grand).",
+          "Peau d'oignon trempée + vinaigre + bicarbonate, pulvériser.",
+          "Crotte de mouton trempée dans l'eau, pulvériser sur les plantes.",
+          "Ail trempé dans l'eau, pulvériser le soir."
+        ],
+        "savoir_paysan_note": "Plusieurs paysans témoignent aussi qu'ils ne traitent pas du tout : l'attaque disparaît souvent d'elle-même en quelques jours, surtout quand le maïs approche de la maturité — même les produits chimiques ont du mal à atteindre cette chenille une fois bien installée dans le cœur de la plante. Les attaques sont plus fortes en période de pluie rare ; de bonnes pluies réduisent la pression. Des paysans du Nord-Bénin vivent cette attaque chaque saison sans que cela empêche une bonne récolte.",
+        "savoir_paysan_source": "Recueilli auprès de paysans béninois — pratiques traditionnelles partagées de bouche à oreille, non testées en laboratoire. À essayer d'abord sur une petite partie du champ avant d'appliquer partout."
       },
       {
         "nom": "Carence azote / excès d'eau",
@@ -843,4 +859,4 @@
       }
     ]
   }
-}
+      }
