@@ -441,6 +441,90 @@
     border-radius:10px;
   }
 
+  .savoir-panel{
+    margin-top:10px;
+    background:linear-gradient(135deg, #EAF2E7, #F3F8F0);
+    border:1px solid #4E7C4F33;
+    border-radius:16px;
+    padding:14px 16px;
+    display:none;
+  }
+  .savoir-panel.show{display:block;animation:fadeIn .4s ease;}
+  .savoir-head{
+    font-weight:600;
+    font-size:13px;
+    color:var(--leaf-dark);
+    margin-bottom:4px;
+  }
+  .savoir-source{
+    font-size:10.5px;
+    color:var(--ink-soft);
+    font-style:italic;
+    line-height:1.4;
+    margin-bottom:10px;
+    padding-bottom:10px;
+    border-bottom:1px dashed #4E7C4F33;
+  }
+  .savoir-list{
+    margin:0;
+    padding:0 0 0 18px;
+    list-style:disc;
+  }
+  .savoir-list li{
+    font-size:12.5px;
+    line-height:1.55;
+    color:var(--ink);
+    margin-bottom:7px;
+  }
+  .savoir-note{
+    margin-top:10px;
+    padding-top:10px;
+    border-top:1px dashed #4E7C4F33;
+    font-size:11.5px;
+    line-height:1.5;
+    color:var(--ink-soft);
+  }
+
+  .fiche-toggle{
+    margin-top:16px;
+    text-align:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    color:var(--ink-soft);
+    text-decoration:underline;
+    cursor:pointer;
+    padding:6px;
+  }
+  .fiche-card{
+    display:none;
+    margin-top:6px;
+    background:var(--card);
+    border-radius:16px;
+    padding:16px;
+    border:1px solid #00000012;
+  }
+  .fiche-card.show{display:block;animation:fadeIn .3s ease;}
+  .fiche-row{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    padding:7px 0;
+    border-bottom:1px solid #00000010;
+    font-size:12.5px;
+  }
+  .fiche-row:last-child{border-bottom:none;}
+  .fiche-row .k{color:var(--ink-soft);}
+  .fiche-row .v{font-family:'IBM Plex Mono', monospace;font-weight:600;text-align:right;max-width:60%;}
+  .fiche-ravageur{
+    margin-top:8px;
+    padding:8px 10px;
+    background:var(--sand-deep);
+    border-radius:10px;
+    font-size:12px;
+    line-height:1.5;
+  }
+  .fiche-ravageur b{color:var(--clay-dark);}
+
   .weather-card{
     margin-top:22px;
     background:linear-gradient(120deg, #FCEFD9, #FBF6EC);
@@ -477,11 +561,159 @@
     opacity:0.7;
     line-height:1.6;
   }
+
+  /* ===== NAV VERTICALE ===== */
+  .nav-vert{
+    display:flex;
+    gap:6px;
+    overflow-x:auto;
+    padding:4px 0 12px;
+    margin-bottom:6px;
+    scrollbar-width:none;
+  }
+  .nav-vert::-webkit-scrollbar{display:none;}
+  .nav-pill{
+    flex:none;
+    padding:8px 14px;
+    border-radius:20px;
+    border:1.5px solid #00000014;
+    background:var(--card);
+    font-family:'Space Grotesk',sans-serif;
+    font-size:12px;
+    font-weight:600;
+    color:var(--ink-soft);
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .nav-pill.active{
+    background:var(--ink);
+    color:#fff;
+    border-color:var(--ink);
+  }
+  .view{display:none;}
+  .view.active{display:block;animation:fadeIn .3s ease;}
+
+  .sub-tabs{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-bottom:14px;
+  }
+  .sub-tab{
+    padding:7px 12px;
+    border-radius:16px;
+    border:1.5px solid #00000014;
+    background:var(--card);
+    font-size:11.5px;
+    font-weight:600;
+    color:var(--ink-soft);
+    cursor:pointer;
+  }
+  .sub-tab.active{
+    background:var(--leaf);
+    color:#fff;
+    border-color:var(--leaf);
+  }
+  .info-card{
+    background:var(--card);
+    border-radius:16px;
+    padding:14px 16px;
+    margin-bottom:12px;
+    border:1px solid #00000012;
+  }
+  .info-card h3{
+    font-family:'Fraunces',serif;
+    font-size:15px;
+    margin:0 0 8px;
+  }
+  .info-card p{
+    font-size:12.5px;
+    line-height:1.55;
+    color:var(--ink);
+    margin:0 0 6px;
+  }
+  .info-card ul{
+    margin:0;
+    padding-left:18px;
+  }
+  .info-card li{
+    font-size:12.5px;
+    line-height:1.55;
+    margin-bottom:4px;
+  }
+  .disclaimer-box{
+    background:#FCEFD9;
+    border:1px solid #E3A93C55;
+    border-radius:12px;
+    padding:10px 12px;
+    font-size:11.5px;
+    line-height:1.5;
+    color:var(--ink-soft);
+    margin-bottom:14px;
+  }
+
+  /* Forum / Suivi local */
+  .local-form{
+    background:var(--sand-deep);
+    border-radius:14px;
+    padding:12px;
+    margin-bottom:14px;
+  }
+  .local-form input, .local-form textarea, .local-form select{
+    width:100%;
+    padding:9px 10px;
+    border-radius:10px;
+    border:1.5px solid #00000014;
+    font-size:12.5px;
+    font-family:'Space Grotesk',sans-serif;
+    margin-bottom:7px;
+    box-sizing:border-box;
+    background:#fff;
+  }
+  .local-form textarea{min-height:70px;resize:vertical;}
+  .local-btn{
+    padding:9px 18px;
+    border-radius:20px;
+    border:none;
+    background:var(--leaf);
+    color:#fff;
+    font-weight:600;
+    font-size:12.5px;
+    cursor:pointer;
+  }
+  .entry-card{
+    background:var(--card);
+    border-radius:12px;
+    padding:10px 12px;
+    margin-bottom:8px;
+    border:1px solid #00000012;
+    font-size:12px;
+    position:relative;
+  }
+  .entry-card .meta{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    color:var(--ink-soft);
+    margin-bottom:4px;
+  }
+  .entry-del{
+    position:absolute;
+    top:8px;right:10px;
+    font-size:11px;
+    color:var(--clay);
+    cursor:pointer;
+  }
+  .empty-note{
+    text-align:center;
+    padding:20px 10px;
+    font-size:12px;
+    color:var(--ink-soft);
+  }
 </style>
 </head>
 <body>
 <div class="page">
-  <div class="top-label">Concept d'interface — assistant agricole</div>
+  <div class="top-label">Concept Numérique — assistant agricole</div>
   <h1 class="brand">GRAIN <span>D'OR</span></h1>
   <p class="tagline">Un assistant pensé pour le paysan béninois.</p>
 
@@ -510,7 +742,22 @@
           </div>
         </div>
 
+        <div class="nav-vert" id="navVert">
+          <div class="nav-pill active" data-view="accueil" onclick="showView('accueil')">🏠 Accueil</div>
+          <div class="nav-pill" data-view="forum" onclick="showView('forum')">💬 Forum</div>
+          <div class="nav-pill" data-view="suivi" onclick="showView('suivi')">📒 Suivi</div>
+          <div class="nav-pill" data-view="techniques" onclick="showView('techniques')">🛠️ Techniques</div>
+          <div class="nav-pill" data-view="regions" onclick="showView('regions')">🗺️ Régions Bénin</div>
+          <div class="nav-pill" data-view="va" onclick="showView('va')">📅 Vacances Agricoles</div>
+          <div class="nav-pill" data-view="materiel" onclick="showView('materiel')">🧰 Matériel</div>
+          <div class="nav-pill" data-view="expert" onclick="showView('expert')">🎓 Expert</div>
+        </div>
+
+        <div class="view active" id="view-accueil">
+
         <div class="section-label">1. Ta culture <span class="crop-count">— 37 cultures, fais défiler ↓</span></div>
+        <input id="cropSearch" type="text" placeholder="🔍 Chercher une culture (ex: maïs, piment...)"
+          style="width:100%;padding:9px 12px;margin:0 0 8px;border-radius:12px;border:1.5px solid #00000014;background:var(--card);font-family:'Space Grotesk',sans-serif;font-size:13px;color:var(--ink);box-sizing:border-box;">
         <div class="crop-grid-wrap">
           <div class="crop-grid" id="cropGrid"></div>
         </div>
@@ -556,7 +803,17 @@
             <span class="risk-tag" id="rRisk">—</span>
             <div class="calendar-note" id="rCal">—</div>
           </div>
+
+          <div class="savoir-panel" id="savoirPanel">
+            <div class="savoir-head">🌾 Savoir paysan — pratiques partagées par des agriculteurs béninois</div>
+            <div class="savoir-source" id="savoirSource">—</div>
+            <ul class="savoir-list" id="savoirList"></ul>
+            <div class="savoir-note" id="savoirNote"></div>
+          </div>
         </div>
+
+        <div class="fiche-toggle" id="ficheToggle" onclick="toggleFiche()">📋 Fiche complète de la culture</div>
+        <div class="fiche-card" id="ficheCard"></div>
 
         <div class="weather-card">
           <div class="ic">🌪️</div>
@@ -566,14 +823,91 @@
           </div>
         </div>
 
-        <div class="plots-card" onclick="alert('Démo : ouvrirait la liste de tes parcelles enregistrées, stockées hors ligne sur le téléphone.')">
-          📦 <b>Voir mes parcelles</b> — 3 enregistrées, tout hors ligne
+        <div class="plots-card" onclick="showView('suivi')">
+          📦 <b>Voir mes parcelles</b> — géré dans l'onglet Suivi, tout hors ligne
         </div>
+        </div><!-- /view-accueil -->
+
+        <!-- ===== FORUM (local à cet appareil) ===== -->
+        <div class="view" id="view-forum">
+          <div class="disclaimer-box">⚠️ Ce forum est actuellement <b>local à ton téléphone</b> : tes messages ne sont pas encore visibles par les autres paysans. Un vrai forum partagé demande un serveur — ce n'est pas encore branché ici.</div>
+          <div class="local-form">
+            <input id="forumAuteur" type="text" placeholder="Ton nom (optionnel)">
+            <textarea id="forumTexte" placeholder="Écris ta question ou ton expérience..."></textarea>
+            <button class="local-btn" onclick="ajouterForum()">Publier (sur cet appareil)</button>
+          </div>
+          <div id="forumListe"></div>
+        </div>
+
+        <!-- ===== SUIVI (carnet de parcelles local) ===== -->
+        <div class="view" id="view-suivi">
+          <div class="disclaimer-box">📦 Ton carnet de suivi est enregistré uniquement sur ce téléphone (hors ligne). Si tu changes de téléphone, tu dois le refaire.</div>
+          <div class="local-form">
+            <select id="suiviCulture"></select>
+            <input id="suiviDate" type="date">
+            <textarea id="suiviNote" placeholder="Note (ex: semis fait, arrosage, symptôme observé...)"></textarea>
+            <button class="local-btn" onclick="ajouterSuivi()">Ajouter au carnet</button>
+          </div>
+          <div id="suiviListe"></div>
+        </div>
+
+        <!-- ===== TECHNIQUES ===== -->
+        <div class="view" id="view-techniques">
+          <div class="sub-tabs">
+            <div class="sub-tab active" data-tech="irrigation" onclick="showTech('irrigation')">💧 Irrigation</div>
+            <div class="sub-tab" data-tech="aeration" onclick="showTech('aeration')">🌬️ Aération</div>
+            <div class="sub-tab" data-tech="protection" onclick="showTech('protection')">🛡️ Protection</div>
+            <div class="sub-tab" data-tech="eau" onclick="showTech('eau')">🚰 Gestion de l'eau</div>
+          </div>
+          <div id="techContent"></div>
+        </div>
+
+        <!-- ===== RÉGIONS BÉNIN ===== -->
+        <div class="view" id="view-regions">
+          <div class="disclaimer-box">Ces types de sols sont des repères généraux, pas une carte précise commune par commune. Fais toujours un test simple sur ta propre parcelle avant de décider.</div>
+          <div id="regionsListe"></div>
+        </div>
+
+        <!-- ===== VACANCES AGRICOLES ===== -->
+        <div class="view" id="view-va">
+          <div class="info-card">
+            <h3>📅 Qu'est-ce que les Vacances Agricoles ?</h3>
+            <p>C'est la période entre la fin d'une récolte et le prochain semis — le moment pour préparer le sol, réparer le matériel, et planifier la campagne suivante plutôt que de rester sans activité.</p>
+          </div>
+          <div class="info-card">
+            <h3>🗓️ Calendrier des semis (37 cultures)</h3>
+            <p>Basé sur les vraies périodes de semis de chaque culture dans Grain d'Or.</p>
+            <div id="vaListe"></div>
+          </div>
+        </div>
+
+        <!-- ===== MATÉRIEL ===== -->
+        <div class="view" id="view-materiel">
+          <div class="disclaimer-box">Liste générale d'outils courants. Les prix varient beaucoup selon la région et le vendeur — vérifie toujours localement avant d'acheter.</div>
+          <div id="materielListe"></div>
+        </div>
+
+        <!-- ===== EXPERT (candidature honnête) ===== -->
+        <div class="view" id="view-expert">
+          <div class="disclaimer-box">🎓 Ceci est une <b>candidature</b>, pas une certification automatique. Tes informations seront envoyées par email pour vérification manuelle. Grain d'Or n'est pas affilié à l'UAC ni à aucune université — aucun badge "certifié" n'est délivré automatiquement.</div>
+          <div class="local-form">
+            <input id="expNom" type="text" placeholder="Nom complet">
+            <input id="expContact" type="text" placeholder="Téléphone ou WhatsApp">
+            <input id="expExp" type="text" placeholder="Années d'expérience agricole">
+            <textarea id="expNote" placeholder="Décris ton expérience, tes cultures, ta zone..."></textarea>
+            <div class="info-card" style="margin:8px 0;">
+              <p><b>Pièces à envoyer séparément par WhatsApp ou email</b> (jamais par ce formulaire, pour ta sécurité) : copie de ta CNI, carte professionnelle si tu en as une, une photo récente.</p>
+            </div>
+            <button class="local-btn" onclick="envoyerCandidatureExpert()">Envoyer ma candidature par email</button>
+          </div>
+        </div>
+
+
       </div>
     </div>
   </div>
 
-  <p class="footer-note">Version branchée sur le vrai backend (main.py + raisonnement.py + cultures_37.json).<br>Les calculs sont réels, pas simulés — mais ils passent par ce serveur, ce n'est plus 100% hors ligne.</p>
+
 </div>
 
 <script>
@@ -650,15 +984,27 @@ let lang='fr', selectedCrop='mais', selectedSoil='argileux', listening=false;
 
 function buildGrid(){
   const grid=document.getElementById('cropGrid');
+  const q=(document.getElementById('cropSearch')?.value || '').toLowerCase().trim();
   grid.innerHTML='';
+  let shown=0;
   Object.entries(CROPS).forEach(([key,c])=>{
+    const label = (lang==='fon'?c.fon:c.fr).toLowerCase();
+    if(q && !label.includes(q) && !c.fr.toLowerCase().includes(q)) return;
+    shown++;
     const btn=document.createElement('div');
     btn.className='crop-btn'+(key===selectedCrop?' selected':'');
     btn.innerHTML=`<span class="emoji">${c.emoji}</span><span class="name">${lang==='fon'?c.fon:c.fr}</span>`;
     btn.onclick=()=>{selectedCrop=key; buildGrid(); hideResults();};
     grid.appendChild(btn);
   });
+  if(shown===0){
+    grid.innerHTML='<div style="grid-column:1/-1;padding:14px;text-align:center;font-size:12px;color:var(--ink-soft);">Aucune culture trouvée pour "'+q+'"</div>';
+  }
 }
+document.addEventListener('DOMContentLoaded', ()=>{
+  const s=document.getElementById('cropSearch');
+  if(s) s.addEventListener('input', buildGrid);
+});
 function buildSoil(){
   const row=document.getElementById('soilRow');
   row.innerHTML='';
@@ -691,6 +1037,8 @@ function toggleMic(){
 function hideResults(){
   document.getElementById('rootPanel').classList.remove('show');
   document.getElementById('bloom').classList.remove('show');
+  document.getElementById('savoirPanel').classList.remove('show');
+  document.getElementById('ficheCard').classList.remove('show');
   ['step1','step2','step3','step4','step5'].forEach(id=>{
     document.getElementById(id).classList.remove('active','done');
   });
@@ -797,6 +1145,56 @@ function showBloom(d){
 
   document.getElementById('rCal').textContent = `📅 ${d.plan.message}`;
   document.getElementById('bloom').classList.add('show');
+
+  const savoirPanel = document.getElementById('savoirPanel');
+  const savoirs = d.diagnostic && d.diagnostic.savoir_paysan;
+  if(savoirs && savoirs.length){
+    document.getElementById('savoirSource').textContent = d.diagnostic.savoir_paysan_source || '';
+    const list = document.getElementById('savoirList');
+    list.innerHTML = savoirs.map(s => `<li>${s}</li>`).join('');
+    document.getElementById('savoirNote').textContent = d.diagnostic.savoir_paysan_note || '';
+    savoirPanel.classList.add('show');
+  } else {
+    savoirPanel.classList.remove('show');
+  }
+}
+
+let ficheOpen = false;
+async function toggleFiche(){
+  const card = document.getElementById('ficheCard');
+  ficheOpen = !ficheOpen;
+  if(!ficheOpen){
+    card.classList.remove('show');
+    return;
+  }
+  const cropNomBackend = BACKEND_CROP[selectedCrop];
+  card.innerHTML = '<div style="text-align:center;padding:10px;font-size:12px;color:var(--ink-soft);">Chargement…</div>';
+  card.classList.add('show');
+  try{
+    const res = await fetch(`/api/culture?nom=${encodeURIComponent(cropNomBackend)}`);
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const d = await res.json();
+    if(d.erreur) throw new Error(d.erreur);
+
+    let ravageursHtml = '';
+    (d.ravageurs || []).forEach(r=>{
+      ravageursHtml += `<div class="fiche-ravageur"><b>${r.nom}</b><br>${r.traitement}</div>`;
+    });
+
+    card.innerHTML = `
+      <div class="fiche-row"><span class="k">Besoin en eau</span><span class="v">${d.eau_l_m2} L/m²</span></div>
+      <div class="fiche-row"><span class="k">Cycle</span><span class="v">${d.cycle_jours} jours</span></div>
+      <div class="fiche-row"><span class="k">pH du sol</span><span class="v">${d.ph_min} – ${d.ph_max}</span></div>
+      <div class="fiche-row"><span class="k">Période de semis</span><span class="v">${d.semis}</span></div>
+      <div class="fiche-row"><span class="k">Engrais</span><span class="v">${d.engrais}</span></div>
+      <div class="fiche-row"><span class="k">Rendement moyen</span><span class="v">${d.rendement_kg_ha.toLocaleString('fr-FR')} kg/ha</span></div>
+      <div class="fiche-row"><span class="k">Prix indicatif</span><span class="v">${d.prix_fcfa_kg} F/kg</span></div>
+      ${ravageursHtml}
+    `;
+  }catch(err){
+    card.innerHTML = '<div style="text-align:center;padding:10px;font-size:12px;color:var(--danger);">⚠️ Impossible de charger la fiche (serveur non joignable).</div>';
+    console.error(err);
+  }
 }
 
 function tickClock(){
@@ -805,6 +1203,224 @@ function tickClock(){
 }
 tickClock();
 setInterval(tickClock, 30000);
+
+// ============================================================
+// NAVIGATION ENTRE VUES
+// ============================================================
+function showView(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nav-pill').forEach(p=>p.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  document.querySelector('.nav-pill[data-view="'+name+'"]').classList.add('active');
+  if(name==='forum') renderForum();
+  if(name==='suivi') renderSuivi();
+  if(name==='techniques') showTech(currentTech);
+  if(name==='regions') renderRegions();
+  if(name==='va') renderVA();
+  if(name==='materiel') renderMateriel();
+}
+
+// ============================================================
+// TECHNIQUES — contenu général, réécrit avec mes mots, pas de
+// marque commerciale, pas de dosage chimique précis non vérifié.
+// ============================================================
+const TECH_CONTENT = {
+  irrigation: `
+    <div class="info-card"><h3>💧 Bien arroser selon le stade de la culture</h3>
+    <p>Les besoins en eau changent tout au long du cycle : légers à la germination, croissants pendant la croissance des feuilles, maximums à la floraison et au grossissement des fruits, puis réduits juste avant la récolte pour concentrer le goût et éviter que les fruits n'éclatent.</p></div>
+    <div class="info-card"><h3>⏰ Le bon moment</h3>
+    <p>Arrose tôt le matin ou en fin de journée — jamais en plein soleil de midi, où la majorité de l'eau s'évapore avant d'atteindre les racines. Vise le pied de la plante, pas les feuilles, pour limiter les maladies fongiques.</p></div>
+    <div class="info-card"><h3>🪣 Reconnaître le manque ou l'excès</h3>
+    <ul>
+      <li>Manque d'eau : feuilles flétries en pleine journée, croissance ralentie, petits fruits.</li>
+      <li>Excès d'eau : feuilles jaunes, racines qui pourrissent, maladies fongiques plus fréquentes.</li>
+    </ul></div>
+    <div class="info-card"><h3>🚰 Goutte-à-goutte</h3>
+    <p>Quand c'est possible, l'irrigation goutte-à-goutte économise beaucoup d'eau par rapport à l'arrosage à la volée, réduit les maladies (feuillage sec) et limite la pousse des mauvaises herbes entre les lignes.</p></div>
+  `,
+  aeration: `
+    <div class="info-card"><h3>🌬️ Pourquoi aérer le sol</h3>
+    <p>Un sol tassé empêche les racines de respirer et de bien s'installer. Le labour, le sarclage et le billonnage cassent la croûte de surface et permettent à l'eau et à l'air de mieux pénétrer.</p></div>
+    <div class="info-card"><h3>🚜 Techniques courantes</h3>
+    <ul>
+      <li>Labour avant la saison des pluies pour ameublir la terre en profondeur.</li>
+      <li>Billonnage : indispensable sur sol argileux ou en pleine saison des pluies, pour évacuer l'excès d'eau et éviter l'asphyxie des racines.</li>
+      <li>Sarclage léger et régulier pendant la croissance, sans blesser les racines superficielles (attention avec l'ananas, le maïs, la pastèque).</li>
+    </ul></div>
+    <div class="info-card"><h3>⚠️ Ne pas travailler un sol trop humide</h3>
+    <p>Travailler la terre juste après une forte pluie la compacte davantage au lieu de l'aérer. Attends qu'elle sèche un peu.</p></div>
+  `,
+  protection: `
+    <div class="info-card"><h3>🛡️ Protection naturelle contre les ravageurs</h3>
+    <p>Les associations de cultures peuvent réduire la pression des insectes : basilic près des tomates et poivrons, ail autour des cultures sensibles, œillets d'Inde en bordure de parcelle. Rien ne remplace une inspection régulière du dessous des feuilles.</p></div>
+    <div class="info-card"><h3>🔄 Rotation des cultures</h3>
+    <p>Ne pas replanter la même famille (tomate, piment, pomme de terre ; ou pastèque, concombre, courge) sur la même parcelle plusieurs saisons de suite. Ça casse le cycle des maladies et ravageurs installés dans le sol.</p></div>
+    <div class="info-card"><h3>👤 Protection humaine</h3>
+    <p>Une clôture (même végétale, comme une haie de campêche) et une surveillance régulière du champ restent la meilleure protection contre le vol de récolte et les animaux errants.</p></div>
+    <div class="info-card"><h3>🌿 Rappel</h3>
+    <p>Pour les traitements naturels précis (neem, savon noir, piment...), consulte les savoirs paysans affichés après un diagnostic sur l'écran Accueil.</p></div>
+  `,
+  eau: `
+    <div class="info-card"><h3>🚰 Gérer l'eau à l'échelle du champ</h3>
+    <ul>
+      <li>Rigoles de drainage sur terrain en pente pour évacuer l'excès de pluie.</li>
+      <li>Billons surélevés en zone humide ou sol argileux.</li>
+      <li>Paillage (paille, résidus de récolte) pour garder l'humidité du sol et réduire les arrosages.</li>
+    </ul></div>
+    <div class="info-card"><h3>🌧️ Captage de pluie</h3>
+    <p>Un simple bassin ou une réserve d'eau de pluie peut faire la différence pendant les semaines sèches, surtout pour les cultures maraîchères à cycle court.</p></div>
+    <div class="info-card"><h3>📅 Adapter au calendrier pluvieux</h3>
+    <p>Choisir des cultures dont le cycle correspond à la saison des pluies de ta zone réduit fortement le besoin d'irrigation d'appoint.</p></div>
+  `,
+};
+let currentTech = 'irrigation';
+function showTech(name){
+  currentTech = name;
+  document.querySelectorAll('.sub-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelector('.sub-tab[data-tech="'+name+'"]').classList.add('active');
+  document.getElementById('techContent').innerHTML = TECH_CONTENT[name];
+}
+
+// ============================================================
+// RÉGIONS BÉNIN — réutilise les types de sol déjà dans l'app
+// ============================================================
+function renderRegions(){
+  const el = document.getElementById('regionsListe');
+  el.innerHTML = Object.entries(SOILS).map(([key,s])=>`
+    <div class="info-card">
+      <h3>${s.fr}</h3>
+      <p>${s.note}. Multiplicateur d'irrigation : ${s.mult}× le besoin de base de la culture.</p>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// VACANCES AGRICOLES — calendrier basé sur les vraies périodes
+// de semis déjà présentes dans les données de chaque culture
+// ============================================================
+function renderVA(){
+  const el = document.getElementById('vaListe');
+  el.innerHTML = Object.entries(CROPS).map(([key,c])=>`
+    <div class="entry-card"><b>${c.emoji} ${c.fr}</b><div class="meta">Semis : ${c.sow||'—'} · Cycle : ${c.cycle||'—'}j</div></div>
+  `).join('');
+}
+
+// ============================================================
+// MATÉRIEL — liste générale, sans marque ni prix précis
+// ============================================================
+const MATERIEL_LISTE = [
+  {n:'Houe / daba', d:'Travail du sol, sarclage, billonnage.'},
+  {n:'Machette / coupe-coupe', d:'Défrichage, récolte, entretien.'},
+  {n:'Arrosoir', d:'Arrosage manuel sur petites surfaces.'},
+  {n:'Pulvérisateur à dos', d:'Application de traitements naturels ou phytosanitaires.'},
+  {n:'Brouette', d:'Transport de compost, récolte, matériaux.'},
+  {n:'Sécateur', d:'Taille, greffage, récolte de fruits.'},
+  {n:'Bâche de séchage', d:'Séchage du grain, protection de la récolte.'},
+  {n:'Sacs de stockage hermétiques (type PICS)', d:'Protège le grain stocké des insectes sans produit chimique.'},
+  {n:'Kit de test pH', d:'Vérifier rapidement l\'acidité du sol avant de semer.'},
+];
+function renderMateriel(){
+  document.getElementById('materielListe').innerHTML = MATERIEL_LISTE.map(m=>`
+    <div class="info-card"><h3>${m.n}</h3><p>${m.d}</p></div>
+  `).join('');
+}
+
+// ============================================================
+// FORUM — stocké uniquement sur cet appareil (localStorage)
+// ============================================================
+function getForum(){
+  try{ return JSON.parse(localStorage.getItem('grainDorForum')||'[]'); }catch(e){ return []; }
+}
+function saveForum(list){ localStorage.setItem('grainDorForum', JSON.stringify(list)); }
+function ajouterForum(){
+  const auteur = document.getElementById('forumAuteur').value.trim() || 'Anonyme';
+  const texte = document.getElementById('forumTexte').value.trim();
+  if(!texte) return;
+  const list = getForum();
+  list.unshift({auteur, texte, date: new Date().toLocaleString('fr-FR')});
+  saveForum(list);
+  document.getElementById('forumTexte').value = '';
+  renderForum();
+}
+function supprimerForum(i){
+  const list = getForum();
+  list.splice(i,1);
+  saveForum(list);
+  renderForum();
+}
+function renderForum(){
+  const list = getForum();
+  const el = document.getElementById('forumListe');
+  if(list.length===0){ el.innerHTML = '<div class="empty-note">Aucun message pour l\'instant sur cet appareil.</div>'; return; }
+  el.innerHTML = list.map((m,i)=>`
+    <div class="entry-card">
+      <span class="entry-del" onclick="supprimerForum(${i})">✕</span>
+      <div class="meta">${m.auteur} · ${m.date}</div>
+      <div>${m.texte}</div>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// SUIVI — carnet de parcelle local (localStorage)
+// ============================================================
+function getSuivi(){
+  try{ return JSON.parse(localStorage.getItem('grainDorSuivi')||'[]'); }catch(e){ return []; }
+}
+function saveSuivi(list){ localStorage.setItem('grainDorSuivi', JSON.stringify(list)); }
+function ajouterSuivi(){
+  const culture = document.getElementById('suiviCulture').value;
+  const date = document.getElementById('suiviDate').value || new Date().toISOString().slice(0,10);
+  const note = document.getElementById('suiviNote').value.trim();
+  if(!note) return;
+  const list = getSuivi();
+  list.unshift({culture, date, note});
+  saveSuivi(list);
+  document.getElementById('suiviNote').value = '';
+  renderSuivi();
+}
+function supprimerSuivi(i){
+  const list = getSuivi();
+  list.splice(i,1);
+  saveSuivi(list);
+  renderSuivi();
+}
+function renderSuivi(){
+  const sel = document.getElementById('suiviCulture');
+  if(sel.options.length===0){
+    sel.innerHTML = Object.entries(CROPS).map(([k,c])=>`<option value="${c.fr}">${c.emoji} ${c.fr}</option>`).join('');
+  }
+  const list = getSuivi();
+  const el = document.getElementById('suiviListe');
+  if(list.length===0){ el.innerHTML = '<div class="empty-note">Aucune entrée pour l\'instant. Commence ton carnet ci-dessus.</div>'; return; }
+  el.innerHTML = list.map((s,i)=>`
+    <div class="entry-card">
+      <span class="entry-del" onclick="supprimerSuivi(${i})">✕</span>
+      <div class="meta">${s.culture} · ${s.date}</div>
+      <div>${s.note}</div>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// EXPERT — candidature honnête envoyée par email (mailto)
+// ============================================================
+function envoyerCandidatureExpert(){
+  const nom = document.getElementById('expNom').value.trim();
+  const contact = document.getElementById('expContact').value.trim();
+  const exp = document.getElementById('expExp').value.trim();
+  const note = document.getElementById('expNote').value.trim();
+  if(!nom || !contact){ alert('Merci de renseigner au moins ton nom et ton contact.'); return; }
+  const sujet = encodeURIComponent('Candidature Expert Grain d\'Or — ' + nom);
+  const corps = encodeURIComponent(
+    'Nom : ' + nom + '\n' +
+    'Contact : ' + contact + '\n' +
+    'Expérience : ' + exp + '\n\n' +
+    'Note :\n' + note + '\n\n' +
+    '(Pièces jointes à envoyer séparément par WhatsApp ou email : CNI, carte professionnelle, photo)'
+  );
+  window.location.href = 'mailto:?subject=' + sujet + '&body=' + corps;
+}
 
 buildGrid();
 buildSoil();
