@@ -213,6 +213,38 @@ class Handler(BaseHTTPRequestHandler):
             self.wfile.write(body)
             return
 
+        if parsed.path == "/api/culture":
+            # Fiche complète d'une culture (recherche / détail dans le frontend).
+            # Retourne exactement ce qui est dans cultures_37.json, sans rien
+            # inventer ni enjoliver.
+            import json
+            db = R.load_cultures()
+            nom = params.get("nom", "")
+            data = db.get(nom)
+            if data is None:
+                body = json.dumps({"erreur": f"Culture inconnue: {nom}"}, ensure_ascii=False).encode("utf-8")
+                self.send_response(404)
+            else:
+                body = json.dumps({"nom": nom, **data}, ensure_ascii=False).encode("utf-8")
+                self.send_response(200)
+            self.send_header("Content-type", "application/json; charset=utf-8")
+            self.send_header("Content-length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
+
+        if parsed.path == "/api/cultures":
+            # Liste des 37 cultures (pour la recherche côté frontend).
+            import json
+            noms = R.liste_cultures()
+            body = json.dumps({"cultures": noms}, ensure_ascii=False).encode("utf-8")
+            self.send_response(200)
+            self.send_header("Content-type", "application/json; charset=utf-8")
+            self.send_header("Content-length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
+
         self.send_response(404)
         self.send_header("Content-type", "text/plain; charset=utf-8")
         self.end_headers()
