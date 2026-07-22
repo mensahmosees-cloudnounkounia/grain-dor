@@ -12,11 +12,7 @@
     "ravageurs": [
       {
         "nom": "Chenille légionnaire d'automne",
-        "cles": [
-          "trou",
-          "chenille",
-          "feuille rongée"
-        ],
+        "cles": ["trou", "chenille", "feuille rongée"],
         "traitement": "Neem 50g/L + savon noir, 10L/ha au coeur de la plante",
         "cout_evite": 15000,
         "savoir_paysan": [
@@ -38,10 +34,7 @@
       },
       {
         "nom": "Carence azote / excès d'eau",
-        "cles": [
-          "jaune",
-          "jaunisse"
-        ],
+        "cles": ["jaune", "jaunisse"],
         "traitement": "Compost + arrêt arrosage 3 jours, PAS de pesticide",
         "cout_evite": 12000
       }
@@ -60,11 +53,7 @@
     "ravageurs": [
       {
         "nom": "Mosaïque africaine du manioc",
-        "cles": [
-          "mosaïque",
-          "tache",
-          "déformée"
-        ],
+        "cles": ["mosaïque", "tache", "déformée"],
         "traitement": "Arracher et brûler les plants atteints, boutures saines certifiées",
         "cout_evite": 25000
       }
@@ -83,11 +72,7 @@
     "ravageurs": [
       {
         "nom": "Anthracnose de l'igname",
-        "cles": [
-          "tache noire",
-          "pourri",
-          "noir"
-        ],
+        "cles": ["tache noire", "pourri", "noir"],
         "traitement": "Retirer feuilles atteintes, cendre de bois sur pied, aérer",
         "cout_evite": 20000
       }
@@ -106,11 +91,7 @@
     "ravageurs": [
       {
         "nom": "Pyriculariose",
-        "cles": [
-          "tache brune",
-          "lésion",
-          "brûlure"
-        ],
+        "cles": ["tache brune", "lésion", "brûlure"],
         "traitement": "Réduire azote, drainer 48h, fongicide bio si grave",
         "cout_evite": 18000
       }
@@ -129,10 +110,7 @@
     "ravageurs": [
       {
         "nom": "Charbon du sorgho",
-        "cles": [
-          "noir",
-          "poussière noire"
-        ],
+        "cles": ["noir", "poussière noire"],
         "traitement": "Semences traitées, rotation culturale",
         "cout_evite": 10000
       }
@@ -151,10 +129,7 @@
     "ravageurs": [
       {
         "nom": "Mildiou du mil",
-        "cles": [
-          "jaune",
-          "duvet blanc"
-        ],
+        "cles": ["jaune", "duvet blanc"],
         "traitement": "Espacer les plants, semences saines",
         "cout_evite": 9000
       }
@@ -173,10 +148,7 @@
     "ravageurs": [
       {
         "nom": "Cercosporiose",
-        "cles": [
-          "tache brune",
-          "tache ronde"
-        ],
+        "cles": ["tache brune", "tache ronde"],
         "traitement": "Rotation 3 ans, cendre de bois",
         "cout_evite": 14000
       }
@@ -195,11 +167,7 @@
     "ravageurs": [
       {
         "nom": "Puceron du niébé",
-        "cles": [
-          "puceron",
-          "déformée",
-          "collant"
-        ],
+        "cles": ["puceron", "déformée", "collant"],
         "traitement": "Neem 50g/L + savon noir",
         "cout_evite": 11000
       }
@@ -218,10 +186,7 @@
     "ravageurs": [
       {
         "nom": "Rouille du soja",
-        "cles": [
-          "rouille",
-          "pustule orange"
-        ],
+        "cles": ["rouille", "pustule orange"],
         "traitement": "Aérer les rangs, éviter excès azote",
         "cout_evite": 13000
       }
@@ -240,11 +205,7 @@
     "ravageurs": [
       {
         "nom": "Chenilles piqueuses-suceuses",
-        "cles": [
-          "trou",
-          "chenille",
-          "piqûre"
-        ],
+        "cles": ["trou", "chenille", "piqûre"],
         "traitement": "Neem + savon noir 10L/ha, piégeage phéromone",
         "cout_evite": 22000
       }
@@ -263,11 +224,7 @@
     "ravageurs": [
       {
         "nom": "Pourriture du cœur",
-        "cles": [
-          "pourri",
-          "noir",
-          "mou"
-        ],
+        "cles": ["pourri", "noir", "mou"],
         "traitement": "Drainer le sol, retirer plants atteints",
         "cout_evite": 30000
       }
@@ -286,10 +243,7 @@
     "ravageurs": [
       {
         "nom": "Anthracnose du manguier",
-        "cles": [
-          "tache noire",
-          "pourri"
-        ],
+        "cles": ["tache noire", "pourri"],
         "traitement": "Tailler branches atteintes, aérer le houppier",
         "cout_evite": 25000
       }
@@ -308,11 +262,7 @@
     "ravageurs": [
       {
         "nom": "Mildiou",
-        "cles": [
-          "tache brune",
-          "duvet",
-          "pourri"
-        ],
+        "cles": ["tache brune", "duvet", "pourri"],
         "traitement": "Espacer les plants, éviter arrosage foliaire, bouillie bordelaise bio",
         "cout_evite": 20000
       }
@@ -331,11 +281,7 @@
     "ravageurs": [
       {
         "nom": "Flétrissement bactérien",
-        "cles": [
-          "flétri",
-          "fane",
-          "jaune"
-        ],
+        "cles": ["flétri", "fane", "jaune"],
         "traitement": "Arracher plants atteints, rotation, éviter excès eau",
         "cout_evite": 18000
       }
@@ -354,11 +300,7 @@
     "ravageurs": [
       {
         "nom": "Nématodes",
-        "cles": [
-          "racine",
-          "galle",
-          "chétif"
-        ],
+        "cles": ["racine", "galle", "chétif"],
         "traitement": "Rotation culturale, compost, cendre de bois",
         "cout_evite": 12000
       }
@@ -377,11 +319,7 @@
     "ravageurs": [
       {
         "nom": "Mildiou de l'oignon",
-        "cles": [
-          "duvet",
-          "tache",
-          "jaune"
-        ],
+        "cles": ["duvet", "tache", "jaune"],
         "traitement": "Espacer, éviter excès humidité foliaire",
         "cout_evite": 16000
       }
@@ -400,10 +338,7 @@
     "ravageurs": [
       {
         "nom": "Alternariose",
-        "cles": [
-          "tache noire",
-          "brûlure"
-        ],
+        "cles": ["tache noire", "brûlure"],
         "traitement": "Rotation, éviter excès azote",
         "cout_evite": 11000
       }
@@ -422,11 +357,7 @@
     "ravageurs": [
       {
         "nom": "Charançon de la patate douce",
-        "cles": [
-          "trou",
-          "galerie",
-          "chenille"
-        ],
+        "cles": ["trou", "galerie", "chenille"],
         "traitement": "Buttage régulier, rotation, pièges à phéromone",
         "cout_evite": 14000
       }
@@ -445,10 +376,7 @@
     "ravageurs": [
       {
         "nom": "Cercosporiose noire",
-        "cles": [
-          "tache noire",
-          "strie"
-        ],
+        "cles": ["tache noire", "strie"],
         "traitement": "Retirer feuilles atteintes, espacer les pieds",
         "cout_evite": 28000
       }
@@ -467,11 +395,7 @@
     "ravageurs": [
       {
         "nom": "Virus de la mosaïque du papayer",
-        "cles": [
-          "mosaïque",
-          "déformée",
-          "jaune"
-        ],
+        "cles": ["mosaïque", "déformée", "jaune"],
         "traitement": "Arracher plants atteints, lutter contre pucerons vecteurs",
         "cout_evite": 22000
       }
@@ -490,10 +414,7 @@
     "ravageurs": [
       {
         "nom": "Pourriture du bourgeon",
-        "cles": [
-          "pourri",
-          "cœur mort"
-        ],
+        "cles": ["pourri", "cœur mort"],
         "traitement": "Drainer, retirer tissus atteints, éviter blessures",
         "cout_evite": 35000
       }
@@ -512,10 +433,7 @@
     "ravageurs": [
       {
         "nom": "Anthracnose de l'anacardier",
-        "cles": [
-          "tache noire",
-          "pourri"
-        ],
+        "cles": ["tache noire", "pourri"],
         "traitement": "Tailler, aérer le houppier",
         "cout_evite": 20000
       }
@@ -534,10 +452,7 @@
     "ravageurs": [
       {
         "nom": "Rouille des feuilles",
-        "cles": [
-          "rouille",
-          "tache orange"
-        ],
+        "cles": ["rouille", "tache orange"],
         "traitement": "Laisser faire, arbre rustique, surveiller seulement",
         "cout_evite": 5000
       }
@@ -556,11 +471,7 @@
     "ravageurs": [
       {
         "nom": "Termites",
-        "cles": [
-          "termite",
-          "galerie",
-          "bois creux"
-        ],
+        "cles": ["termite", "galerie", "bois creux"],
         "traitement": "Cendre de bois autour du pied, éviter blessures au tronc",
         "cout_evite": 15000
       }
@@ -579,11 +490,7 @@
     "ravageurs": [
       {
         "nom": "Pucerons",
-        "cles": [
-          "puceron",
-          "collant",
-          "déformée"
-        ],
+        "cles": ["puceron", "collant", "déformée"],
         "traitement": "Neem + savon noir",
         "cout_evite": 9000
       }
@@ -602,11 +509,7 @@
     "ravageurs": [
       {
         "nom": "Fusariose",
-        "cles": [
-          "flétri",
-          "fane",
-          "racine"
-        ],
+        "cles": ["flétri", "fane", "racine"],
         "traitement": "Rotation culturale, semences saines",
         "cout_evite": 10000
       }
@@ -625,11 +528,7 @@
     "ravageurs": [
       {
         "nom": "Pourriture racinaire",
-        "cles": [
-          "racine",
-          "pourri",
-          "flétri"
-        ],
+        "cles": ["racine", "pourri", "flétri"],
         "traitement": "Sol bien drainé, rotation",
         "cout_evite": 10000
       }
@@ -648,10 +547,7 @@
     "ravageurs": [
       {
         "nom": "Rouille du fonio",
-        "cles": [
-          "rouille",
-          "tache orange"
-        ],
+        "cles": ["rouille", "tache orange"],
         "traitement": "Semences saines, espacer les plants",
         "cout_evite": 8000
       }
@@ -670,10 +566,7 @@
     "ravageurs": [
       {
         "nom": "Anthracnose du haricot",
-        "cles": [
-          "tache noire",
-          "lésion"
-        ],
+        "cles": ["tache noire", "lésion"],
         "traitement": "Semences saines, rotation, éviter excès eau",
         "cout_evite": 12000
       }
@@ -692,10 +585,7 @@
     "ravageurs": [
       {
         "nom": "Chenille du chou",
-        "cles": [
-          "trou",
-          "chenille"
-        ],
+        "cles": ["trou", "chenille"],
         "traitement": "Neem + savon noir, filet anti-insecte",
         "cout_evite": 16000
       }
@@ -714,10 +604,7 @@
     "ravageurs": [
       {
         "nom": "Oïdium",
-        "cles": [
-          "poudre blanche",
-          "duvet"
-        ],
+        "cles": ["poudre blanche", "duvet"],
         "traitement": "Aérer les plants, éviter excès azote",
         "cout_evite": 11000
       }
@@ -736,11 +623,7 @@
     "ravageurs": [
       {
         "nom": "Doryphore africain",
-        "cles": [
-          "trou",
-          "chenille",
-          "larve"
-        ],
+        "cles": ["trou", "chenille", "larve"],
         "traitement": "Ramassage manuel, Neem + savon noir",
         "cout_evite": 14000
       }
@@ -759,11 +642,7 @@
     "ravageurs": [
       {
         "nom": "Pourriture du rhizome",
-        "cles": [
-          "pourri",
-          "mou",
-          "noir"
-        ],
+        "cles": ["pourri", "mou", "noir"],
         "traitement": "Sol bien drainé, éviter excès eau",
         "cout_evite": 20000
       }
@@ -782,11 +661,7 @@
     "ravageurs": [
       {
         "nom": "Pourriture du rhizome",
-        "cles": [
-          "pourri",
-          "mou",
-          "noir"
-        ],
+        "cles": ["pourri", "mou", "noir"],
         "traitement": "Sol bien drainé, rotation",
         "cout_evite": 18000
       }
@@ -805,11 +680,7 @@
     "ravageurs": [
       {
         "nom": "Chenilles défoliatrices",
-        "cles": [
-          "trou",
-          "chenille",
-          "feuille rongée"
-        ],
+        "cles": ["trou", "chenille", "feuille rongée"],
         "traitement": "Neem + savon noir",
         "cout_evite": 10000
       }
@@ -828,10 +699,7 @@
     "ravageurs": [
       {
         "nom": "Peu de maladies (arbre rustique)",
-        "cles": [
-          "tache",
-          "insecte"
-        ],
+        "cles": ["tache", "insecte"],
         "traitement": "Surveillance simple, arbre très résistant",
         "cout_evite": 3000
       }
@@ -850,13 +718,10 @@
     "ravageurs": [
       {
         "nom": "Chancre citrique",
-        "cles": [
-          "tache liégeuse",
-          "croûte"
-        ],
+        "cles": ["tache liégeuse", "croûte"],
         "traitement": "Tailler et brûler les parties atteintes, désinfecter les outils",
         "cout_evite": 22000
       }
     ]
   }
-}
+  }
