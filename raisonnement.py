@@ -163,7 +163,7 @@ def diagnostic_maladie(culture: str, symptome_texte: str) -> dict:
         for cle in ravageur["cles"]:
             if cle in texte:
                 cout_fmt = f"{ravageur['cout_evite']:,}".replace(",", " ")
-                return {
+                resultat = {
                     "trouve": True,
                     "nom": ravageur["nom"],
                     "traitement": ravageur["traitement"],
@@ -174,6 +174,13 @@ def diagnostic_maladie(culture: str, symptome_texte: str) -> dict:
                         f"vs traitement chimique systématique."
                     ),
                 }
+                # Savoirs paysans (pratiques traditionnelles partagées par des
+                # agriculteurs béninois) — quand disponibles pour ce ravageur.
+                if "savoir_paysan" in ravageur:
+                    resultat["savoir_paysan"] = ravageur["savoir_paysan"]
+                    resultat["savoir_paysan_note"] = ravageur.get("savoir_paysan_note", "")
+                    resultat["savoir_paysan_source"] = ravageur.get("savoir_paysan_source", "")
+                return resultat
 
     return {
         "trouve": False,
