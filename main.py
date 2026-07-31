@@ -21,8 +21,10 @@ import raisonnement as R
 
 PORT = int(os.environ.get("PORT", "8000"))
 FRONTEND_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "frontend.html")
+ADMIN_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "admin.html")
 
 _frontend_cache = None
+_admin_cache = None
 
 
 def load_frontend() -> bytes:
@@ -32,6 +34,18 @@ def load_frontend() -> bytes:
         with open(FRONTEND_PATH, "r", encoding="utf-8") as f:
             _frontend_cache = f.read().encode("utf-8")
     return _frontend_cache
+
+
+def load_admin() -> bytes:
+    """Lit admin.html une seule fois et le garde en mémoire. Protégé par la
+    vraie connexion Supabase Auth côté client — ce n'est pas parce que
+    l'URL est devinable que les données le sont : RLS bloque tout accès
+    en écriture sans session authentifiée valide."""
+    global _admin_cache
+    if _admin_cache is None:
+        with open(ADMIN_PATH, "r", encoding="utf-8") as f:
+            _admin_cache = f.read().encode("utf-8")
+    return _admin_cache
 
 
 def render_options(items, selected):
@@ -179,6 +193,15 @@ class Handler(BaseHTTPRequestHandler):
             self.wfile.write(body)
             return
 
+        if parsed.path in ("/admin", "/admin.html"):
+            body = load_admin()
+            self.send_response(200)
+            self.send_header("Content-type", "text/html; charset=utf-8")
+            self.send_header("Content-length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
+
         if parsed.path == "/legacy":
             # Ancienne page 100% rendue côté serveur, sans JS de front dédié.
             # Gardée comme repli simple si frontend.html pose problème.
@@ -258,3 +281,4 @@ class Handler(BaseHTTPRequestHandler):
 if __name__ == "__main__":
     print(f"Grain d'Or — serveur démarré sur le port {PORT}")
     HTTPServer(("0.0.0.0", PORT), Handler).serve_forever()
+
