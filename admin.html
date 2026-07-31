@@ -140,13 +140,13 @@ const TABS = {
     titleField: "annonces",
     fields: [
       { key: "annonces", label: "Titre", type: "text" },
+      { key: "photo_url", label: "Photo", type: "image" },
       { key: "description", label: "Description", type: "textarea" },
       { key: "contact", label: "Contact", type: "text" },
       { key: "categorie", label: "Catégorie", type: "select", options: [
           ["annonce","Annonce"], ["service","Service"], ["intrant","Intrant"], ["transforme","Produit transformé"]
         ]},
-      { key: "statut", label: "Statut", type: "select", options: [["publie","Publié"],["brouillon","Brouillon"]] },
-      { key: "photo_url", label: "Photo", type: "image" }
+      { key: "statut", label: "Statut", type: "select", options: [["publie","Publié"],["brouillon","Brouillon"]] }
     ]
   },
   cultures: {
@@ -155,10 +155,10 @@ const TABS = {
     titleField: "nom",
     fields: [
       { key: "nom", label: "Nom de la culture", type: "text" },
+      { key: "image_url", label: "Image", type: "image" },
       { key: "description", label: "Description", type: "textarea" },
       { key: "saison", label: "Saison", type: "text" },
-      { key: "statut", label: "Statut", type: "select", options: [["publie","Publié"],["brouillon","Brouillon"]] },
-      { key: "image_url", label: "Image", type: "image" }
+      { key: "statut", label: "Statut", type: "select", options: [["publie","Publié"],["brouillon","Brouillon"]] }
     ]
   },
   savoirs: {
@@ -167,11 +167,11 @@ const TABS = {
     titleField: "titre",
     fields: [
       { key: "titre", label: "Titre", type: "text" },
+      { key: "contenu", label: "Contenu", type: "textarea" },
       { key: "culture", label: "Culture concernée", type: "text" },
       { key: "type", label: "Type", type: "select", options: [
           ["technique","Technique de culture"], ["maladie","Maladie / ravageur"], ["calendrier","Calendrier"], ["conseil","Conseil général"]
         ]},
-      { key: "contenu", label: "Contenu", type: "textarea" },
       { key: "statut", label: "Statut", type: "select", options: [["publie","Publié"],["brouillon","Brouillon"]] }
     ]
   }
@@ -260,6 +260,7 @@ async function loadList(){
         </div>
         <div class="card-meta">${secondaryField ? escapeHtml(row[secondaryField.key] || '') : ''}</div>
         <div class="card-desc">${descField ? escapeHtml(row[descField.key] || '') : ''}</div>
+        ${row.created_at ? `<div style="font-size:11px;color:var(--gold-dim);margin-top:6px;">${new Date(row.created_at).toLocaleDateString('fr-FR')}</div>` : ''}
         <div class="card-actions">
           <button data-action="edit">Modifier</button>
           <button data-action="delete" class="danger">Supprimer</button>
