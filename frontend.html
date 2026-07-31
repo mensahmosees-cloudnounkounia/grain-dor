@@ -709,6 +709,126 @@
     font-size:12px;
     color:var(--ink-soft);
   }
+
+  /* ===== RECHERCHE GLOBALE ===== */
+  .search-icon-btn{
+    width:22px;height:22px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:13px;
+    color:var(--ink-soft);
+    cursor:pointer;
+    background:none;
+    border:none;
+  }
+  .search-overlay{
+    display:none;
+    flex-direction:column;
+    position:absolute;
+    inset:0;
+    background:var(--card);
+    z-index:50;
+    border-radius:34px;
+    padding:16px;
+    overflow:hidden;
+  }
+  .search-overlay.show{display:flex;}
+  .search-head{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:12px;
+  }
+  .search-head input{
+    flex:1;
+    padding:10px 12px;
+    border-radius:14px;
+    border:1.5px solid #00000014;
+    font-family:'Space Grotesk',sans-serif;
+    font-size:13px;
+    background:var(--sand);
+  }
+  .search-close{
+    font-size:16px;
+    color:var(--ink-soft);
+    cursor:pointer;
+    padding:4px 8px;
+  }
+  .search-result{
+    background:var(--sand-deep);
+    border-radius:12px;
+    padding:10px 12px;
+    margin-bottom:8px;
+    cursor:pointer;
+    font-size:12.5px;
+  }
+  .search-result .tag{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:9.5px;
+    text-transform:uppercase;
+    color:var(--leaf-dark);
+    margin-bottom:2px;
+    display:block;
+  }
+  .search-result b{color:var(--ink);}
+  .search-result .excerpt{color:var(--ink-soft);margin-top:2px;}
+
+  .chat-messages{
+    flex:1;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    padding-bottom:8px;
+  }
+  .bubble{
+    max-width:85%;
+    padding:9px 12px;
+    border-radius:14px;
+    font-size:12.5px;
+    line-height:1.5;
+  }
+  .bubble-bot{
+    background:var(--sand-deep);
+    align-self:flex-start;
+    border-bottom-left-radius:4px;
+  }
+  .bubble-user{
+    background:var(--leaf);
+    color:#fff;
+    align-self:flex-end;
+    border-bottom-right-radius:4px;
+  }
+  .chip-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    align-self:flex-start;
+    max-width:95%;
+  }
+  .chip-btn{
+    padding:6px 12px;
+    border-radius:14px;
+    border:1.5px solid var(--leaf);
+    background:#fff;
+    color:var(--leaf-dark);
+    font-size:12px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .search-input-row{
+    display:flex;
+    gap:8px;
+    margin-top:8px;
+  }
+  .search-input-row input{
+    flex:1;
+    padding:10px 12px;
+    border-radius:14px;
+    border:1.5px solid #00000014;
+    font-family:'Space Grotesk',sans-serif;
+    font-size:13px;
+    background:var(--sand);
+  }
 </style>
 </head>
 <body>
@@ -721,8 +841,21 @@
     <div class="phone">
       <div class="phone-notch"></div>
       <div class="status-bar">
+        <button class="search-icon-btn" onclick="toggleSearch()" aria-label="Rechercher">🔍</button>
         <span id="clock">08:42</span>
-        <div class="offline-pill"><span class="offline-dot"></span>Connecté — main.py</div>
+        <div class="offline-pill"><span class="offline-dot"></span>Connecté</div>
+      </div>
+
+      <div class="search-overlay" id="searchOverlay">
+        <div class="search-head">
+          <b>🔎 Assistant Grain d'Or</b>
+          <span class="search-close" onclick="toggleSearch()">✕</span>
+        </div>
+        <div id="chatMessages" class="chat-messages"></div>
+        <div class="search-input-row">
+          <input id="searchInput" type="text" placeholder="Pose ta question..." onkeydown="if(event.key==='Enter')askChat()">
+          <button class="local-btn" onclick="askChat()">Envoyer</button>
+        </div>
       </div>
 
       <div class="screen">
@@ -750,6 +883,10 @@
           <div class="nav-pill" data-view="regions" onclick="showView('regions')">🗺️ Régions Bénin</div>
           <div class="nav-pill" data-view="va" onclick="showView('va')">📅 Vacances Agricoles</div>
           <div class="nav-pill" data-view="materiel" onclick="showView('materiel')">🧰 Matériel</div>
+          <div class="nav-pill" data-view="marketplace" onclick="showView('marketplace')">🛒 Marketplace</div>
+          <div class="nav-pill" data-view="catalogue" onclick="showView('catalogue')">📇 Catalogue</div>
+          <div class="nav-pill" data-view="formation" onclick="showView('formation')">🎓 Formation</div>
+          <div class="nav-pill" data-view="excursions" onclick="showView('excursions')">🗺️ Excursions</div>
           <div class="nav-pill" data-view="expert" onclick="showView('expert')">🎓 Expert</div>
         </div>
 
@@ -828,9 +965,9 @@
         </div>
         </div><!-- /view-accueil -->
 
-        <!-- ===== FORUM (local à cet appareil) ===== -->
+        <!-- ===== FORUM (partagé via Supabase) ===== -->
         <div class="view" id="view-forum">
-          <div class="disclaimer-box">⚠️ Ce forum est actuellement <b>local à ton téléphone</b> : tes messages ne sont pas encore visibles par les autres paysans. Un vrai forum partagé demande un serveur — ce n'est pas encore branché ici.</div>
+          <div class="disclaimer-box">💬 Ce forum est <b>partagé</b> : tout ce que tu écris est visible par tous les visiteurs de l'app. N'écris rien de personnel ou de privé ici.</div>
           <div class="local-form">
             <input id="forumAuteur" type="text" placeholder="Ton nom (optionnel)">
             <textarea id="forumTexte" placeholder="Écris ta question ou ton expérience..."></textarea>
@@ -887,6 +1024,65 @@
           <div id="materielListe"></div>
         </div>
 
+        <!-- ===== MARKETPLACE (répertoire de services, géré par Grain d'Or) ===== -->
+        <div class="view" id="view-marketplace">
+          <div class="disclaimer-box">🛒 Répertoire de services agricoles disponibles, géré par Grain d'Or. Aucune vente ni paiement ne passe par l'app — contacte directement la personne indiquée pour conclure. Ce n'est pas une place de marché en libre-service.</div>
+          <div id="marketplaceContent"></div>
+        </div>
+
+        <!-- ===== CATALOGUE (annuaire statique géré par Grain d'Or) ===== -->
+        <div class="view" id="view-catalogue">
+          <div class="disclaimer-box">📇 Annuaire géré directement par Grain d'Or — ce n'est pas un espace où chacun publie librement. Pour faire référencer un service, une annonce ou un point de vente d'intrants, contacte l'équipe (voir Expert).</div>
+          <div class="sub-tabs">
+            <div class="sub-tab active" data-cat="annonces" onclick="showCatalogue('annonces')">📢 Annonces</div>
+            <div class="sub-tab" data-cat="services" onclick="showCatalogue('services')">🧑‍🌾 Service Agricole</div>
+            <div class="sub-tab" data-cat="intrants" onclick="showCatalogue('intrants')">🌱 Intrants & Équipement</div>
+            <div class="sub-tab" data-cat="transformes" onclick="showCatalogue('transformes')">🏭 Produits transformés</div>
+          </div>
+          <div id="catalogueContent"></div>
+        </div>
+
+        <!-- ===== FORMATION & CONSEILS (Académie Nounkoun) ===== -->
+        <div class="view" id="view-formation">
+          <div class="info-card">
+            <h3>🎓 Académie Nounkoun</h3>
+            <p>Pas de vidéos lourdes ni de cours à télécharger — tout ce que Grain d'Or sait déjà, organisé en un seul endroit pour apprendre pas à pas.</p>
+          </div>
+          <div class="info-card">
+            <h3>1. Comprendre ton sol</h3>
+            <p>Commence par l'onglet <b>Régions Bénin</b> pour connaître ton type de sol, puis vérifie le pH conseillé pour ta culture dans sa <b>Fiche complète</b> (bouton sur l'écran Accueil).</p>
+          </div>
+          <div class="info-card">
+            <h3>2. Maîtriser l'eau</h3>
+            <p>Les principes d'irrigation, d'aération et de gestion de l'eau sont dans l'onglet <b>Techniques</b>.</p>
+          </div>
+          <div class="info-card">
+            <h3>3. Reconnaître et traiter les ravageurs</h3>
+            <p>Décris un symptôme sur l'écran Accueil pour un diagnostic réel, avec — quand disponibles — de vrais savoirs paysans béninois.</p>
+          </div>
+          <div class="info-card">
+            <h3>4. Planifier ta saison</h3>
+            <p>L'onglet <b>Vacances Agricoles</b> te donne le calendrier de semis des 37 cultures pour organiser ta prochaine campagne.</p>
+          </div>
+          <div class="info-card">
+            <h3>5. Aller plus loin</h3>
+            <p>Utilise le 🔍 en haut de l'écran pour chercher directement un mot-clé dans tout Grain d'Or.</p>
+          </div>
+        </div>
+
+        <!-- ===== EXCURSIONS (planificateur local) ===== -->
+        <div class="view" id="view-excursions">
+          <div class="disclaimer-box">🗺️ Tes excursions sont enregistrées uniquement sur cet appareil, comme le Suivi et le Forum.</div>
+          <div class="local-form">
+            <input id="excTitre" type="text" placeholder="Titre (ex: Visite champ voisin, Marché intrants...)">
+            <input id="excDate" type="date">
+            <input id="excLieu" type="text" placeholder="Lieu">
+            <textarea id="excNote" placeholder="Notes, objectif de la sortie..."></textarea>
+            <button class="local-btn" onclick="ajouterExcursion()">Programmer</button>
+          </div>
+          <div id="excListe"></div>
+        </div>
+
         <!-- ===== EXPERT (candidature honnête) ===== -->
         <div class="view" id="view-expert">
           <div class="disclaimer-box">🎓 Ceci est une <b>candidature</b>, pas une certification automatique. Tes informations seront envoyées par email pour vérification manuelle. Grain d'Or n'est pas affilié à l'UAC ni à aucune université — aucun badge "certifié" n'est délivré automatiquement.</div>
@@ -899,6 +1095,11 @@
               <p><b>Pièces à envoyer séparément par WhatsApp ou email</b> (jamais par ce formulaire, pour ta sécurité) : copie de ta CNI, carte professionnelle si tu en as une, une photo récente.</p>
             </div>
             <button class="local-btn" onclick="envoyerCandidatureExpert()">Envoyer ma candidature par email</button>
+          </div>
+          <div class="info-card" style="margin-top:14px;">
+            <h3>⚙️ Toi seul (Mensah)</h3>
+            <p>Ce bouton génère le code à copier-coller pour ajouter une entrée au Catalogue/Marketplace, sans écrire de JavaScript à la main.</p>
+            <button class="local-btn" onclick="openAdmin()">Générer une entrée</button>
           </div>
         </div>
 
@@ -1215,6 +1416,9 @@ function showView(name){
   if(name==='forum') renderForum();
   if(name==='suivi') renderSuivi();
   if(name==='techniques') showTech(currentTech);
+  if(name==='catalogue') showCatalogue(currentCatalogue);
+  if(name==='excursions') renderExcursions();
+  if(name==='marketplace') renderMarketplace();
   if(name==='regions') renderRegions();
   if(name==='va') renderVA();
   if(name==='materiel') renderMateriel();
@@ -1273,6 +1477,99 @@ const TECH_CONTENT = {
     <p>Choisir des cultures dont le cycle correspond à la saison des pluies de ta zone réduit fortement le besoin d'irrigation d'appoint.</p></div>
   `,
 };
+// ============================================================
+// CATALOGUE — annuaire statique géré uniquement par Grain d'Or
+// (pas un espace où les visiteurs publient eux-mêmes). Vide pour
+// l'instant : à remplir avec de vraies entrées vérifiées, jamais
+// inventées.
+// ============================================================
+// ============================================================
+// SUPABASE — base de données partagée réelle. La clé "anon" est
+// faite pour être publique : elle est protégée par les politiques
+// de sécurité (RLS) configurées côté Supabase, pas par le secret.
+// Une seule table sert aux 4 sections, triées par la colonne
+// "categorie" (annonce / service / intrant / transforme).
+// ============================================================
+const SUPABASE_URL = 'https://vmhilaqkuydgdelxnmaa.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZtaGlsYXFrdXlkZ2RlbHhubWFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUzODEwMDUsImV4cCI6MjEwMDk1NzAwNX0.F6Jt6LzMiUPgAJIsou_81J-xZGaQ9dmgKOPcjjwCUSQ';
+const SUPABASE_TABLE = "Grain D'or";
+
+async function fetchListings(categorie){
+  let url = SUPABASE_URL + '/rest/v1/' + encodeURIComponent(SUPABASE_TABLE) + '?select=*&order=created_at.desc';
+  if(Array.isArray(categorie)){
+    url += '&categorie=in.(' + categorie.map(encodeURIComponent).join(',') + ')';
+  } else if(categorie){
+    url += '&categorie=eq.' + encodeURIComponent(categorie);
+  }
+  const res = await fetch(url, {
+    headers: {
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+    }
+  });
+  if(!res.ok) throw new Error('HTTP '+res.status);
+  return res.json();
+}
+function renderListingCards(rows){
+  return rows.map(r=>`
+    <div class="info-card">
+      ${r.photo_url ? `<img src="${r.photo_url}" alt="" style="width:100%;border-radius:10px;margin-bottom:8px;display:block;">` : ''}
+      <h3>${r.annonces||'(sans titre)'}</h3>
+      <p>${r.description||''}</p>
+      ${r.contact?('<p><b>Contact :</b> '+r.contact+'</p>'):''}
+      ${r.created_at ? '<p style="font-size:10.5px;color:var(--ink-soft);margin-top:4px;">'+new Date(r.created_at).toLocaleDateString('fr-FR')+'</p>' : ''}
+    </div>
+  `).join('');
+}
+async function loadInto(elId, categorie, emptyMsg){
+  const el = document.getElementById(elId);
+  el.innerHTML = '<div class="empty-note">Chargement…</div>';
+  try{
+    const rows = await fetchListings(categorie);
+    el.innerHTML = rows.length===0
+      ? '<div class="empty-note">'+emptyMsg+'</div>'
+      : renderListingCards(rows);
+  }catch(err){
+    el.innerHTML = '<div class="empty-note">⚠️ Impossible de charger (connexion à la base indisponible). Réessaie plus tard.</div>';
+    console.error(err);
+  }
+}
+
+const CATALOGUE_LABELS = {
+  annonces: {categorie:'annonce', empty:"Aucune annonce pour l'instant."},
+  services: {categorie:'service', empty:"Aucun service référencé pour l'instant."},
+  intrants: {categorie:'intrant', empty:"Aucun fournisseur référencé pour l'instant."},
+  transformes: {categorie:'transforme', empty:"Aucun produit transformé référencé pour l'instant."},
+};
+let currentCatalogue = 'annonces';
+async function showCatalogue(tab){
+  currentCatalogue = tab;
+  document.querySelectorAll('.sub-tab[data-cat]').forEach(t=>t.classList.remove('active'));
+  document.querySelector('.sub-tab[data-cat="'+tab+'"]').classList.add('active');
+  const label = CATALOGUE_LABELS[tab];
+  await loadInto('catalogueContent', label.categorie, label.empty);
+}
+
+// ============================================================
+// MARKETPLACE — même table, catégorie "marketplace". Pas de
+// paiement ni de transaction dans l'app.
+// ============================================================
+async function renderMarketplace(){
+  await loadInto('marketplaceContent', ['annonce','service','intrant','transforme'], "Rien à afficher pour l'instant.");
+}
+
+// ============================================================
+// GÉNÉRATEUR ADMIN — outil local pour générer le code à copier-
+// coller dans CATALOGUE_CONTENT / MARKETPLACE_CONTENT.
+// ⚠️ Ce n'est PAS une vraie sécurité : le mot de passe est visible
+// dans le code source. Ça sert juste à éviter les clics accidentels,
+// pas à protéger des données sensibles.
+// ============================================================
+function openAdmin(){
+  window.location.href = '/admin';
+}
+
+
 let currentTech = 'irrigation';
 function showTech(name){
   currentTech = name;
@@ -1326,39 +1623,56 @@ function renderMateriel(){
 }
 
 // ============================================================
-// FORUM — stocké uniquement sur cet appareil (localStorage)
+// FORUM — maintenant partagé pour de vrai via Supabase (catégorie
+// "forum"), visible par tous les visiteurs. Réutilise la même
+// table : "annonces" = le message, "contact" = le nom de l'auteur.
 // ============================================================
-function getForum(){
-  try{ return JSON.parse(localStorage.getItem('grainDorForum')||'[]'); }catch(e){ return []; }
+async function postForum(auteur, texte){
+  const url = SUPABASE_URL + '/rest/v1/' + encodeURIComponent(SUPABASE_TABLE);
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=minimal',
+    },
+    body: JSON.stringify({ annonces: texte, contact: auteur, categorie: 'forum' }),
+  });
+  if(!res.ok) throw new Error('HTTP '+res.status);
 }
-function saveForum(list){ localStorage.setItem('grainDorForum', JSON.stringify(list)); }
-function ajouterForum(){
+async function ajouterForum(){
   const auteur = document.getElementById('forumAuteur').value.trim() || 'Anonyme';
   const texte = document.getElementById('forumTexte').value.trim();
   if(!texte) return;
-  const list = getForum();
-  list.unshift({auteur, texte, date: new Date().toLocaleString('fr-FR')});
-  saveForum(list);
-  document.getElementById('forumTexte').value = '';
-  renderForum();
+  const btn = document.querySelector('#view-forum .local-btn');
+  btn.disabled = true;
+  try{
+    await postForum(auteur, texte);
+    document.getElementById('forumTexte').value = '';
+    await renderForum();
+  }catch(err){
+    alert("⚠️ Impossible de publier (connexion à la base indisponible). Réessaie plus tard.");
+    console.error(err);
+  }
+  btn.disabled = false;
 }
-function supprimerForum(i){
-  const list = getForum();
-  list.splice(i,1);
-  saveForum(list);
-  renderForum();
-}
-function renderForum(){
-  const list = getForum();
+async function renderForum(){
   const el = document.getElementById('forumListe');
-  if(list.length===0){ el.innerHTML = '<div class="empty-note">Aucun message pour l\'instant sur cet appareil.</div>'; return; }
-  el.innerHTML = list.map((m,i)=>`
-    <div class="entry-card">
-      <span class="entry-del" onclick="supprimerForum(${i})">✕</span>
-      <div class="meta">${m.auteur} · ${m.date}</div>
-      <div>${m.texte}</div>
-    </div>
-  `).join('');
+  el.innerHTML = '<div class="empty-note">Chargement…</div>';
+  try{
+    const rows = await fetchListings('forum');
+    if(rows.length===0){ el.innerHTML = '<div class="empty-note">Aucun message pour l\'instant.</div>'; return; }
+    el.innerHTML = rows.map(m=>`
+      <div class="entry-card">
+        <div class="meta">${m.contact||'Anonyme'} · ${new Date(m.created_at).toLocaleString('fr-FR')}</div>
+        <div>${m.annonces||''}</div>
+      </div>
+    `).join('');
+  }catch(err){
+    el.innerHTML = '<div class="empty-note">⚠️ Impossible de charger le forum (connexion à la base indisponible).</div>';
+    console.error(err);
+  }
 }
 
 // ============================================================
@@ -1403,6 +1717,48 @@ function renderSuivi(){
 }
 
 // ============================================================
+// EXCURSIONS — planificateur local (localStorage), triées par date
+// ============================================================
+function getExcursions(){
+  try{ return JSON.parse(localStorage.getItem('grainDorExcursions')||'[]'); }catch(e){ return []; }
+}
+function saveExcursions(list){ localStorage.setItem('grainDorExcursions', JSON.stringify(list)); }
+function ajouterExcursion(){
+  const titre = document.getElementById('excTitre').value.trim();
+  const date = document.getElementById('excDate').value;
+  const lieu = document.getElementById('excLieu').value.trim();
+  const note = document.getElementById('excNote').value.trim();
+  if(!titre || !date){ alert('Renseigne au moins un titre et une date.'); return; }
+  const list = getExcursions();
+  list.push({titre, date, lieu, note});
+  list.sort((a,b)=> a.date.localeCompare(b.date));
+  saveExcursions(list);
+  document.getElementById('excTitre').value = '';
+  document.getElementById('excLieu').value = '';
+  document.getElementById('excNote').value = '';
+  renderExcursions();
+}
+function supprimerExcursion(i){
+  const list = getExcursions();
+  list.splice(i,1);
+  saveExcursions(list);
+  renderExcursions();
+}
+function renderExcursions(){
+  const list = getExcursions();
+  const el = document.getElementById('excListe');
+  if(list.length===0){ el.innerHTML = '<div class="empty-note">Aucune excursion programmée.</div>'; return; }
+  const today = new Date().toISOString().slice(0,10);
+  el.innerHTML = list.map((e,i)=>`
+    <div class="entry-card">
+      <span class="entry-del" onclick="supprimerExcursion(${i})">✕</span>
+      <div class="meta">${e.date}${e.date < today ? ' · passée' : ''}${e.lieu ? ' · '+e.lieu : ''}</div>
+      <div><b>${e.titre}</b>${e.note ? '<br>'+e.note : ''}</div>
+    </div>
+  `).join('');
+}
+
+// ============================================================
 // EXPERT — candidature honnête envoyée par email (mailto)
 // ============================================================
 function envoyerCandidatureExpert(){
@@ -1419,11 +1775,158 @@ function envoyerCandidatureExpert(){
     'Note :\n' + note + '\n\n' +
     '(Pièces jointes à envoyer séparément par WhatsApp ou email : CNI, carte professionnelle, photo)'
   );
-  window.location.href = 'mailto:?subject=' + sujet + '&body=' + corps;
+  window.location.href = 'mailto:mensahmoise12@gmail.com?subject=' + sujet + '&body=' + corps;
 }
+
+// ============================================================
+// RECHERCHE GLOBALE — cherche uniquement dans les vraies données
+// déjà présentes dans l'app (cultures, ravageurs, engrais,
+// techniques). Aucun contenu généré, aucune invention possible.
+// ============================================================
+// ============================================================
+// ASSISTANT CHAT — répond uniquement à partir des vraies données
+// de Grain d'Or (cultures, techniques, diagnostic réel). Tolérance
+// simple aux fautes de frappe. Ce n'est PAS une IA entraînée :
+// aucune génération de texte libre, seulement de la reformulation
+// de données vérifiées.
+// ============================================================
+function normalize(s){
+  return (s||'').toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'') // enlève les accents
+    .trim();
+}
+function levenshtein(a,b){
+  const m=a.length, n=b.length;
+  const d=Array.from({length:m+1},(_, i)=>[i,...Array(n).fill(0)]);
+  for(let j=0;j<=n;j++) d[0][j]=j;
+  for(let i=1;i<=m;i++) for(let j=1;j<=n;j++){
+    d[i][j] = a[i-1]===b[j-1] ? d[i-1][j-1] : 1+Math.min(d[i-1][j],d[i][j-1],d[i-1][j-1]);
+  }
+  return d[m][n];
+}
+function addBubble(text, who){
+  const el = document.getElementById('chatMessages');
+  const div = document.createElement('div');
+  div.className = 'bubble ' + (who==='user' ? 'bubble-user' : 'bubble-bot');
+  div.innerHTML = text;
+  el.appendChild(div);
+  el.scrollTop = el.scrollHeight;
+}
+function addCropChips(){
+  const el = document.getElementById('chatMessages');
+  const wrap = document.createElement('div');
+  wrap.className = 'chip-row';
+  const keys = Object.keys(CROPS).slice(0,8);
+  wrap.innerHTML = keys.map(k=>`<button class="chip-btn" onclick="pickCrop('${k}')">${CROPS[k].emoji} ${CROPS[k].fr}</button>`).join('');
+  el.appendChild(wrap);
+  el.scrollTop = el.scrollHeight;
+}
+let chatPendingCrop = null;
+
+function toggleSearch(){
+  const ov = document.getElementById('searchOverlay');
+  ov.classList.toggle('show');
+  if(ov.classList.contains('show')){
+    document.getElementById('chatMessages').innerHTML = '';
+    document.getElementById('searchInput').value = '';
+    chatPendingCrop = null;
+    addBubble("Bonjour 🌾 Quelle culture t'intéresse ? (ou pose directement ta question, ex: \"quand planter maïs\")", 'bot');
+    addCropChips();
+    setTimeout(()=>document.getElementById('searchInput').focus(), 50);
+  }
+}
+function pickCrop(key){
+  chatPendingCrop = key;
+  addBubble(CROPS[key].emoji+' '+CROPS[key].fr, 'user');
+  addBubble("Quelle est ta question sur le "+CROPS[key].fr+" ? (semis, pH, ravageur, engrais...)", 'bot');
+}
+
+function detectCrop(qNorm){
+  let best=null, bestDist=99;
+  for(const [key,c] of Object.entries(CROPS)){
+    const nameNorm = normalize(c.fr);
+    if(qNorm.includes(nameNorm)) return key;
+    // tolérance simple aux fautes sur chaque mot de la question
+    for(const word of qNorm.split(/\s+/)){
+      if(word.length<3) continue;
+      const dist = levenshtein(word, nameNorm);
+      if(dist <= 1 && dist < bestDist){ best=key; bestDist=dist; }
+    }
+  }
+  return best;
+}
+function detectIntent(qNorm){
+  const rules = [
+    {intent:'photo', kw:['photo','image','capture']},
+    {intent:'quand', kw:['quand','saison','periode','mois']},
+    {intent:'comment_planter', kw:['comment planter','comment cultiver','comment faire','planter']},
+    {intent:'ph', kw:['ph','acide','acidite','sol']},
+    {intent:'ravageur', kw:['chenille','insecte','trou','maladie','tache','pourri','jaune','ravageur','bete','ver']},
+  ];
+  for(const r of rules) if(r.kw.some(k=>qNorm.includes(k))) return r.intent;
+  return null;
+}
+
+async function askChat(){
+  const input = document.getElementById('searchInput');
+  const raw = input.value.trim();
+  if(!raw) return;
+  addBubble(raw, 'user');
+  input.value = '';
+  const qNorm = normalize(raw);
+
+  // Redirection honnête si mention de photo — pas de faux diagnostic image.
+  if(detectIntent(qNorm)==='photo'){
+    addBubble("Je ne peux pas encore analyser des photos — aucun vrai outil de reconnaissance d'image n'est branché ici (je préfère te le dire plutôt que d'inventer un diagnostic). Décris plutôt ce que tu vois : couleur, forme, partie touchée (feuille, tige, fruit) ?", 'bot');
+    return;
+  }
+
+  const cropKey = detectCrop(qNorm) || chatPendingCrop;
+  const intent = detectIntent(qNorm);
+
+  if(!cropKey){
+    addBubble("Je n'ai pas reconnu de culture dans ta question. De quelle culture s'agit-il ?", 'bot');
+    addCropChips();
+    return;
+  }
+  chatPendingCrop = cropKey;
+  const c = CROPS[cropKey];
+
+  if(intent==='quand' || intent==='comment_planter'){
+    addBubble(`🌱 <b>${c.fr}</b> : semis en ${c.sow}, cycle de ${c.cycle} jours. Engrais conseillé : ${c.fert}.`, 'bot');
+  }else if(intent==='ph'){
+    addBubble("Je vérifie le pH exact pour "+c.fr+"…", 'bot');
+    try{
+      const res = await fetch(`/api/culture?nom=${encodeURIComponent(BACKEND_CROP[cropKey])}`);
+      const d = await res.json();
+      addBubble(`🧪 <b>${c.fr}</b> : pH conseillé entre ${d.ph_min} et ${d.ph_max}. En dehors de cette fourchette, la plante absorbe moins bien les nutriments.`, 'bot');
+    }catch(e){
+      addBubble("⚠️ Impossible de récupérer le pH exact (serveur non joignable). Ouvre la fiche complète de "+c.fr+" sur l'écran Accueil.", 'bot');
+    }
+  }else if(intent==='ravageur'){
+    addBubble("Je regarde ce que ça peut être pour "+c.fr+"…", 'bot');
+    try{
+      const params = new URLSearchParams({culture:BACKEND_CROP[cropKey], sol:'argileux', pluie:5, surface:1, sympt:raw});
+      const res = await fetch(`/api/raisonner?${params.toString()}`);
+      const data = await res.json();
+      const diag = data?.["4_risque"]?.diagnostic;
+      const risque = diag?.message || "Pas de diagnostic précis trouvé pour ce symptôme sur "+c.fr+".";
+      addBubble("🔎 "+risque, 'bot');
+    }catch(e){
+      addBubble("⚠️ Impossible de faire le diagnostic (serveur non joignable). Réessaie depuis l'écran Accueil.", 'bot');
+    }
+  }else{
+    // Pas d'intention claire détectée : on montre ce qu'on sait déjà sur la culture.
+    addBubble(`Sur ${c.fr} : semis ${c.sow}, cycle ${c.cycle}j, ravageur connu "${c.disease}". Précise ta question (semis, pH, ravageur) pour une réponse plus ciblée.`, 'bot');
+  }
+  addBubble("Tu as une autre question, ou une autre culture ?", 'bot');
+  addCropChips();
+}
+
 
 buildGrid();
 buildSoil();
 </script>
 </body>
 </html>
+
