@@ -1637,7 +1637,7 @@ async function postForum(auteur, texte){
       'Content-Type': 'application/json',
       'Prefer': 'return=minimal',
     },
-    body: JSON.stringify({ annonces: texte, contact: auteur, categorie: 'forum' }),
+    body: JSON.stringify({ annonces: texte, contact: auteur, categorie: 'forum', statut: 'publie' }),
   });
   if(!res.ok) throw new Error('HTTP '+res.status);
 }
