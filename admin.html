@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grain d'Or — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root{
+    --bg: #1c1712; --bg-raised: #26201a; --bg-input: #2f2820;
+    --gold: #d4a94a; --gold-dim: #9c7f3c; --cream: #f2e9d8; --cream-dim: #b8ac96;
+    --green: #6b7a4f; --rust: #b5502f; --rust-bright: #d1633c; --border: #3a3226; --radius: 10px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); color:var(--cream); font-family:'Inter',sans-serif; min-height:100vh;}
+  h1,h2,h3{font-family:'Fraunces',serif; font-weight:600; margin:0;}
+  .wheat{display:inline-block; width:1em; color:var(--gold);}
+
+  #login-screen{min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;}
+  .login-card{width:100%; max-width:380px; background:var(--bg-raised); border:1px solid var(--border); border-radius:16px; padding:40px 32px; text-align:center;}
+  .login-card h1{font-size:28px; color:var(--gold); margin-bottom:4px;}
+  .login-card p.tag{color:var(--cream-dim); font-size:13px; margin-bottom:28px; letter-spacing:0.04em; text-transform:uppercase;}
+  .field{text-align:left; margin-bottom:16px;}
+  label{display:block; font-size:12px; color:var(--cream-dim); margin-bottom:6px; letter-spacing:0.03em;}
+  input, textarea, select{width:100%; background:var(--bg-input); border:1px solid var(--border); color:var(--cream); padding:11px 12px; border-radius:8px; font-family:'Inter',sans-serif; font-size:14px;}
+  input:focus, textarea:focus, select:focus{outline:none; border-color:var(--gold);}
+  button{cursor:pointer; font-family:'Inter',sans-serif; font-weight:600; border:none; border-radius:8px; font-size:14px; transition:opacity .15s ease, transform .1s ease;}
+  button:active{transform:scale(0.98);}
+  .btn-primary{background:var(--gold); color:#1c1712; padding:12px; width:100%;}
+  .btn-primary:hover{opacity:0.9;}
+  #login-error{color:var(--rust-bright); font-size:13px; margin-top:14px; min-height:16px;}
+
+  #app-screen{display:none;}
+  header{display:flex; align-items:center; justify-content:space-between; padding:18px 32px; border-bottom:1px solid var(--border); background:var(--bg-raised);}
+  header .brand{display:flex; align-items:center; gap:10px;}
+  header .brand h1{font-size:20px; color:var(--gold);}
+  header .brand span{font-size:12px; color:var(--cream-dim);}
+  #logout-btn{background:transparent; color:var(--cream-dim); border:1px solid var(--border); padding:8px 16px;}
+  #logout-btn:hover{color:var(--cream); border-color:var(--gold-dim);}
+
+  .tabs{display:flex; gap:4px; padding:0 32px; background:var(--bg-raised); border-bottom:1px solid var(--border); overflow-x:auto;}
+  .tab{padding:14px 18px; color:var(--cream-dim); font-size:14px; font-weight:600; cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap;}
+  .tab.active{color:var(--gold); border-bottom-color:var(--gold);}
+
+  main{max-width:1000px; margin:0 auto; padding:32px 24px 80px;}
+  .toolbar{display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;}
+  .toolbar h2{font-size:22px;}
+  .new-btn{background:var(--green); color:#fff; padding:10px 18px;}
+  .new-btn:hover{opacity:0.9;}
+
+  .list{display:grid; gap:14px;}
+  .card{background:var(--bg-raised); border:1px solid var(--border); border-radius:var(--radius); padding:18px 20px; display:flex; gap:16px;}
+  .card img{width:80px; height:80px; object-fit:cover; border-radius:8px; background:var(--bg-input); flex-shrink:0;}
+  .card-body{flex:1; min-width:0;}
+  .card-top{display:flex; justify-content:space-between; align-items:flex-start; gap:8px;}
+  .card-top h3{font-size:17px; color:var(--cream);}
+  .badge{font-size:11px; padding:3px 9px; border-radius:20px; text-transform:uppercase; letter-spacing:0.03em; white-space:nowrap; font-weight:600;}
+  .badge.publie{background:rgba(107,122,79,0.25); color:#a8bb87;}
+  .badge.brouillon{background:rgba(181,80,47,0.2); color:var(--rust-bright);}
+  .card-meta{font-size:12px; color:var(--gold-dim); margin:4px 0 6px;}
+  .card-desc{font-size:13px; color:var(--cream-dim); line-height:1.5; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;}
+  .card-actions{display:flex; gap:8px; margin-top:10px;}
+  .card-actions button{background:transparent; border:1px solid var(--border); color:var(--cream-dim); padding:6px 12px; font-size:12px;}
+  .card-actions button:hover{border-color:var(--gold-dim); color:var(--cream);}
+  .card-actions button.danger:hover{border-color:var(--rust-bright); color:var(--rust-bright);}
+  .empty-state{color:var(--cream-dim); text-align:center; padding:60px 20px; font-size:14px;}
+
+  #modal-backdrop{display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; padding:20px; z-index:10;}
+  #modal{background:var(--bg-raised); border:1px solid var(--border); border-radius:14px; padding:28px; width:100%; max-width:460px; max-height:90vh; overflow-y:auto;}
+  #modal h2{font-size:19px; margin-bottom:20px; color:var(--gold);}
+  .modal-actions{display:flex; gap:10px; margin-top:20px;}
+  #cancel-btn{background:transparent; border:1px solid var(--border); color:var(--cream-dim); padding:11px; flex:1;}
+  #save-btn{flex:2;}
+  #form-error{color:var(--rust-bright); font-size:13px; margin-top:10px; min-height:14px;}
+
+  @media (max-width:560px){
+    header{padding:16px 18px;} .tabs{padding:0 12px;} main{padding:20px 14px 60px;}
+    .card{flex-direction:column;} .card img{width:100%; height:160px;}
+  }
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-card">
+    <h1><span class="wheat">🌾</span> Grain d'Or</h1>
+    <p class="tag">Panneau d'administration</p>
+    <div class="field"><label for="login-email">E-mail</label><input id="login-email" type="email" autocomplete="username"></div>
+    <div class="field"><label for="login-password">Mot de passe</label><input id="login-password" type="password" autocomplete="current-password"></div>
+    <button class="btn-primary" id="login-btn">Se connecter</button>
+    <div id="login-error"></div>
+  </div>
+</div>
+
+<div id="app-screen">
+  <header>
+    <div class="brand"><h1><span class="wheat">🌾</span> Grain d'Or</h1><span id="user-email"></span></div>
+    <button id="logout-btn">Déconnexion</button>
+  </header>
+  <div class="tabs">
+    <div class="tab active" data-tab="annonces">Annonces</div>
+    <div class="tab" data-tab="cultures">Cultures</div>
+    <div class="tab" data-tab="savoirs">Savoirs & connaissances</div>
+  </div>
+  <main>
+    <div class="toolbar">
+      <h2 id="tab-title">Annonces</h2>
+      <button class="new-btn" id="new-btn">+ Nouveau</button>
+    </div>
+    <div class="list" id="list"></div>
+    <div class="empty-state" id="empty-state" style="display:none;">Rien ici pour le moment.</div>
+  </main>
+</div>
+
+<div id="modal-backdrop">
+  <div id="modal">
+    <h2 id="modal-title">Nouveau</h2>
+    <input type="hidden" id="edit-id">
+    <div id="form-fields"></div>
+    <div id="form-error"></div>
+    <div class="modal-actions">
+      <button id="cancel-btn">Annuler</button>
+      <button class="btn-primary" id="save-btn">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = "https://vmhilaqkuydgdelxnmaa.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZtaGlsYXFrdXlkZ2RlbHhubWFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUzODEwMDUsImV4cCI6MjEwMDk1NzAwNX0.F6Jt6LzMiUPgAJIsou_81J-xZGaQ9dmgKOPcjjwCUSQ";
+const BUCKET_NAME = "photo";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const TABS = {
+  annonces: {
+    table: "Grain D'or",
+    titleSingular: "annonce",
+    titleField: "annonces",
+    fields: [
+      { key: "annonces", label: "Titre", type: "text" },
+      { key: "description", label: "Description", type: "textarea" },
+      { key: "contact", label: "Contact", type: "text" },
+      { key: "categorie", label: "Catégorie", type: "select", options: [
+          ["annonce","Annonce"], ["service","Service"], ["intrant","Intrant"], ["transforme","Produit transformé"]
+        ]},
+      { key: "statut", label: "Statut", type: "select", options: [["publie","Publié"],["brouillon","Brouillon"]] },
+      { key: "photo_url", label: "Photo", type: "image" }
+    ]
+  },
+  cultures: {
+    table: "cultures",
+    titleSingular: "culture",
+    titleField: "nom",
+    fields: [
+      { key: "nom", label: "Nom de la culture", type: "text" },
+      { key: "description", label: "Description", type: "textarea" },
+      { key: "saison", label: "Saison", type: "text" },
+      { key: "statut", label: "Statut", type: "select", options: [["publie","Publié"],["brouillon","Brouillon"]] },
+      { key: "image_url", label: "Image", type: "image" }
+    ]
+  },
+  savoirs: {
+    table: "savoirs",
+    titleSingular: "savoir",
+    titleField: "titre",
+    fields: [
+      { key: "titre", label: "Titre", type: "text" },
+      { key: "culture", label: "Culture concernée", type: "text" },
+      { key: "type", label: "Type", type: "select", options: [
+          ["technique","Technique de culture"], ["maladie","Maladie / ravageur"], ["calendrier","Calendrier"], ["conseil","Conseil général"]
+        ]},
+      { key: "contenu", label: "Contenu", type: "textarea" },
+      { key: "statut", label: "Statut", type: "select", options: [["publie","Publié"],["brouillon","Brouillon"]] }
+    ]
+  }
+};
+
+let currentTab = "annonces";
+let currentPhotoUrl = "";
+let selectedFile = null;
+
+const loginScreen = document.getElementById('login-screen');
+const appScreen = document.getElementById('app-screen');
+const loginBtn = document.getElementById('login-btn');
+const loginError = document.getElementById('login-error');
+const logoutBtn = document.getElementById('logout-btn');
+const userEmailEl = document.getElementById('user-email');
+const listEl = document.getElementById('list');
+const emptyState = document.getElementById('empty-state');
+const newBtn = document.getElementById('new-btn');
+const modalBackdrop = document.getElementById('modal-backdrop');
+const cancelBtn = document.getElementById('cancel-btn');
+const saveBtn = document.getElementById('save-btn');
+const formError = document.getElementById('form-error');
+const modalTitle = document.getElementById('modal-title');
+const editIdEl = document.getElementById('edit-id');
+const formFields = document.getElementById('form-fields');
+const tabTitle = document.getElementById('tab-title');
+
+async function checkSession(){
+  const { data } = await sb.auth.getSession();
+  if(data.session){ showApp(data.session.user); } else { showLogin(); }
+}
+function showLogin(){ loginScreen.style.display='flex'; appScreen.style.display='none'; }
+function showApp(user){
+  loginScreen.style.display='none'; appScreen.style.display='block';
+  userEmailEl.textContent = user.email;
+  loadList();
+}
+
+loginBtn.addEventListener('click', async () => {
+  loginError.textContent = "";
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  if(!email || !password){ loginError.textContent = "Renseigne ton e-mail et ton mot de passe."; return; }
+  loginBtn.textContent = "Connexion...";
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  loginBtn.textContent = "Se connecter";
+  if(error){ loginError.textContent = "Erreur : " + error.message; return; }
+  showApp(data.user);
+});
+logoutBtn.addEventListener('click', async () => { await sb.auth.signOut(); showLogin(); });
+
+document.querySelectorAll('.tab').forEach(tabEl => {
+  tabEl.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    tabEl.classList.add('active');
+    currentTab = tabEl.dataset.tab;
+    tabTitle.textContent = tabEl.textContent;
+    loadList();
+  });
+});
+
+function escapeHtml(str){ const div = document.createElement('div'); div.textContent = str || ""; return div.innerHTML; }
+
+async function loadList(){
+  const cfg = TABS[currentTab];
+  listEl.innerHTML = "";
+  const { data, error } = await sb.from(cfg.table).select('*').order('created_at', { ascending: false });
+  if(error){ listEl.innerHTML = `<div class="empty-state">Erreur de chargement : ${escapeHtml(error.message)}</div>`; return; }
+  if(!data || data.length === 0){ emptyState.style.display = 'block'; return; }
+  emptyState.style.display = 'none';
+
+  data.forEach(row => {
+    const imgField = cfg.fields.find(f => f.type === 'image');
+    const photoUrl = imgField ? row[imgField.key] : null;
+    const secondaryField = cfg.fields.find(f => f.key !== cfg.titleField && f.type !== 'image' && f.type !== 'textarea');
+    const descField = cfg.fields.find(f => f.type === 'textarea');
+    const photo = photoUrl ? `<img src="${photoUrl}" alt="">` : `<div style="width:80px;height:80px;border-radius:8px;background:var(--bg-input);flex-shrink:0;"></div>`;
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      ${photo}
+      <div class="card-body">
+        <div class="card-top">
+          <h3>${escapeHtml(row[cfg.titleField] || '(sans titre)')}</h3>
+          ${row.statut ? `<span class="badge ${row.statut === 'publie' ? 'publie' : 'brouillon'}">${row.statut === 'publie' ? 'Publié' : 'Brouillon'}</span>` : ''}
+        </div>
+        <div class="card-meta">${secondaryField ? escapeHtml(row[secondaryField.key] || '') : ''}</div>
+        <div class="card-desc">${descField ? escapeHtml(row[descField.key] || '') : ''}</div>
+        <div class="card-actions">
+          <button data-action="edit">Modifier</button>
+          <button data-action="delete" class="danger">Supprimer</button>
+        </div>
+      </div>`;
+    listEl.appendChild(card);
+    card.querySelector('[data-action="edit"]').addEventListener('click', () => openEdit(row));
+    card.querySelector('[data-action="delete"]').addEventListener('click', () => deleteRow(row.id));
+  });
+}
+
+function renderForm(cfg, row){
+  formFields.innerHTML = "";
+  cfg.fields.forEach(f => {
+    const wrap = document.createElement('div');
+    wrap.className = 'field';
+    let inputHtml = "";
+    if(f.type === 'textarea'){
+      inputHtml = `<textarea id="f-${f.key}" rows="3"></textarea>`;
+    } else if(f.type === 'select'){
+      inputHtml = `<select id="f-${f.key}">${f.options.map(([v,l]) => `<option value="${v}">${l}</option>`).join('')}</select>`;
+    } else if(f.type === 'image'){
+      inputHtml = `<input id="f-${f.key}" type="file" accept="image/*"><img id="photo-preview" style="width:100%;height:120px;object-fit:cover;border-radius:8px;margin-top:8px;display:none;background:var(--bg-input);">`;
+    } else {
+      inputHtml = `<input id="f-${f.key}" type="text">`;
+    }
+    wrap.innerHTML = `<label for="f-${f.key}">${f.label}</label>${inputHtml}`;
+    formFields.appendChild(wrap);
+  });
+
+  cfg.fields.forEach(f => {
+    if(f.type === 'image') return;
+    const el = document.getElementById(`f-${f.key}`);
+    el.value = row ? (row[f.key] || (f.type === 'select' ? f.options[0][0] : "")) : (f.type === 'select' ? f.options[0][0] : "");
+  });
+
+  const imgField = cfg.fields.find(f => f.type === 'image');
+  selectedFile = null;
+  currentPhotoUrl = "";
+  if(imgField){
+    currentPhotoUrl = row ? (row[imgField.key] || "") : "";
+    const preview = document.getElementById('photo-preview');
+    const fileInput = document.getElementById(`f-${imgField.key}`);
+    if(currentPhotoUrl){ preview.src = currentPhotoUrl; preview.style.display = 'block'; }
+    fileInput.addEventListener('change', (e) => {
+      selectedFile = e.target.files[0] || null;
+      if(selectedFile){ preview.src = URL.createObjectURL(selectedFile); preview.style.display = 'block'; }
+    });
+  }
+}
+
+newBtn.addEventListener('click', () => openNew());
+cancelBtn.addEventListener('click', () => modalBackdrop.style.display = 'none');
+
+function openNew(){
+  const cfg = TABS[currentTab];
+  modalTitle.textContent = "Nouveau : " + cfg.titleSingular;
+  editIdEl.value = "";
+  formError.textContent = "";
+  renderForm(cfg, null);
+  modalBackdrop.style.display = 'flex';
+}
+function openEdit(row){
+  const cfg = TABS[currentTab];
+  modalTitle.textContent = "Modifier : " + cfg.titleSingular;
+  editIdEl.value = row.id;
+  formError.textContent = "";
+  renderForm(cfg, row);
+  modalBackdrop.style.display = 'flex';
+}
+
+saveBtn.addEventListener('click', async () => {
+  const cfg = TABS[currentTab];
+  formError.textContent = "";
+  saveBtn.textContent = "Enregistrement...";
+  saveBtn.disabled = true;
+  try{
+    const payload = {};
+    if(selectedFile){
+      const ext = selectedFile.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+      const { error: uploadError } = await sb.storage.from(BUCKET_NAME).upload(fileName, selectedFile);
+      if(uploadError) throw uploadError;
+      const { data: publicUrlData } = sb.storage.from(BUCKET_NAME).getPublicUrl(fileName);
+      currentPhotoUrl = publicUrlData.publicUrl;
+    }
+    cfg.fields.forEach(f => {
+      if(f.type === 'image'){ payload[f.key] = currentPhotoUrl; return; }
+      payload[f.key] = document.getElementById(`f-${f.key}`).value.trim();
+    });
+    if(cfg.titleField && !payload[cfg.titleField]){ throw new Error("Le champ \"" + cfg.fields.find(f=>f.key===cfg.titleField).label + "\" est obligatoire."); }
+
+    const editId = editIdEl.value;
+    let error;
+    if(editId){ ({ error } = await sb.from(cfg.table).update(payload).eq('id', editId)); }
+    else { ({ error } = await sb.from(cfg.table).insert(payload)); }
+    if(error) throw error;
+    modalBackdrop.style.display = 'none';
+    loadList();
+  } catch(err){
+    formError.textContent = "Erreur : " + err.message;
+  } finally {
+    saveBtn.textContent = "Enregistrer";
+    saveBtn.disabled = false;
+  }
+});
+
+async function deleteRow(id){
+  const cfg = TABS[currentTab];
+  if(!confirm("Supprimer cet élément ?")) return;
+  const { error } = await sb.from(cfg.table).delete().eq('id', id);
+  if(error){ alert("Erreur lors de la suppression : " + error.message); return; }
+  loadList();
+}
+
+checkSession();
+</script>
+</body>
+</html>
+
