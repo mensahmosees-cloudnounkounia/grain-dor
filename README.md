@@ -1,43 +1,54 @@
-# Grain d'Or — version statique (sans backend)
+# Grain d'Or / Nounkoun
 
-Cette version tourne **entièrement dans le navigateur**. Tous les calculs
-(irrigation, économie, diagnostic, calendrier) qui étaient avant faits par
-`main.py` + `raisonnement.py` sur un serveur sont maintenant faits par
-`reasoning-engine.js`, directement sur le téléphone du paysan. Testé pour
-donner exactement les mêmes résultats que la version serveur.
+Assistant agricole pour paysans béninois — 37 cultures, raisonnement en 5 étapes,
+diagnostic ravageurs, marketplace communautaire, forum, panneau admin.
 
-## Fichiers (les 5 doivent rester ensemble, mêmes noms)
-- `index.html` — l'application
-- `reasoning-engine.js` — le moteur de calcul (copie fidèle de raisonnement.py)
-- `cultures_37.json` — les 37 cultures (même base que la version serveur)
-- `manifest.json` — pour installer l'app comme une icône sur le téléphone (PWA)
-- `sw.js` — fait fonctionner l'app hors-ligne après la première visite
+Ce dépôt contient **deux versions indépendantes** de l'app. Choisis celle qui
+correspond à ton besoin — les deux peuvent coexister, mais elles ne partagent
+pas les mêmes fonctionnalités.
 
-## Déployer — 3 options gratuites
+## Version A — App complète (serveur), déployée sur Render
 
-### Option A — Render Static Site
-1. Upload ces 5 fichiers sur un dépôt GitHub (comme avant)
-2. Sur Render : **New → Static Site**
-3. **Build Command** : laisser vide
-4. **Publish Directory** : `.`
-5. Deploy
+C'est **la version principale**, en ligne sur Render, avec tout le fonctionnel :
 
-### Option B — GitHub Pages (encore plus simple, pas besoin de Render)
-1. Dans le dépôt GitHub → **Settings → Pages**
-2. Source : **Deploy from a branch** → `main` → `/ (root)`
-3. Save. Le site est en ligne en 1-2 minutes à une adresse du type
-   `https://tonpseudo.github.io/nom-du-depot/`
+- Fichiers : `main.py`, `raisonnement.py`, `cultures_37.json`, `frontend.html`, `admin.html`
+- **Marketplace, Catalogue et Forum en direct** via Supabase (partagés entre tous les visiteurs)
+- **Panneau admin** (`/admin`) pour ajouter/modifier/supprimer annonces, cultures, savoirs — sans coder
+- Raisonnement agricole calculé côté serveur par `main.py` + `raisonnement.py`
 
-### Option C — Test local via Termux
-```
-cd nounkoun_static
-python -m http.server 8000
-```
-Puis ouvrir `http://localhost:8000` dans le navigateur du téléphone.
+**Déploiement** (déjà fait, pour référence si tu redéploies ailleurs) :
+- Render → New → Web Service → connecter ce dépôt
+- Build Command : `pip install -r requirements.txt`
+- Start Command : `python main.py`
+- App publique : `/` — Panneau admin : `/admin`
 
-## Ce qui a changé par rapport à la version serveur
-- Plus besoin de payer Render ($0/mois garanti, pas de mise en veille)
-- Fonctionne même sans connexion internet après la première visite (PWA)
-- Les calculs sont strictement identiques (même formules, testées)
-- Pour mettre à jour les cultures ou les savoirs paysans plus tard :
-  modifier `cultures_37.json` et re-uploader — aucun code à toucher
+⚠️ Sur le plan gratuit Render, le serveur s'endort après 15 min d'inactivité
+(~30-50s pour redémarrer au premier accès suivant).
+
+## Version B — App statique hors-ligne (PWA), déployée sur GitHub Pages
+
+Une version **allégée, installable comme une icône**, qui fonctionne **sans
+connexion internet** après la première visite — pratique en zone rurale mal
+couverte.
+
+- Fichiers : `index.html`, `reasoning-engine.js`, `cultures_37.json`, `manifest.json`, `sw.js`
+- Le raisonnement agricole tourne **directement dans le téléphone du paysan**
+  (`reasoning-engine.js` est une copie fidèle de `raisonnement.py`)
+- **Pas de Marketplace/Catalogue/Forum en direct** — cette version n'est pas
+  connectée à Supabase. Le Forum y est un carnet **local à l'appareil** uniquement.
+- **Pas de panneau admin** — rien à administrer puisque tout est statique.
+
+**Déploiement** (déjà fait) : GitHub → Settings → Pages → source = branche
+`main`. En ligne à `https://mensahmosees-cloudnounkounia.github.io/grain-dor/`.
+
+## Fichiers annexes (pas encore branchés)
+
+- `fon_audio.py` — présent dans le dépôt, aucune route ne l'appelle encore dans `main.py`
+- `scraper_aic_fao.py` — script pour enrichir `cultures_37.json` à partir de sources FAO/AIC
+
+## Sécurité du panneau admin
+
+`/admin` n'est lié nulle part dans l'app publique — seul toi connais l'URL.
+Même devinée, aucune modification n'est possible sans se connecter avec le
+compte Supabase créé dans Authentication → Users. Les policies RLS bloquent
+toute écriture sans session valide.
