@@ -22,9 +22,11 @@ import raisonnement as R
 PORT = int(os.environ.get("PORT", "8000"))
 FRONTEND_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "frontend.html")
 ADMIN_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "admin.html")
+PRIVACY_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "confidentialite.html")
 
 _frontend_cache = None
 _admin_cache = None
+_privacy_cache = None
 
 
 def load_frontend() -> bytes:
@@ -46,6 +48,15 @@ def load_admin() -> bytes:
         with open(ADMIN_PATH, "r", encoding="utf-8") as f:
             _admin_cache = f.read().encode("utf-8")
     return _admin_cache
+
+
+def load_privacy() -> bytes:
+    """Lit confidentialite.html une seule fois et le garde en mémoire."""
+    global _privacy_cache
+    if _privacy_cache is None:
+        with open(PRIVACY_PATH, "r", encoding="utf-8") as f:
+            _privacy_cache = f.read().encode("utf-8")
+    return _privacy_cache
 
 
 def render_options(items, selected):
@@ -195,6 +206,15 @@ class Handler(BaseHTTPRequestHandler):
 
         if parsed.path in ("/admin", "/admin.html"):
             body = load_admin()
+            self.send_response(200)
+            self.send_header("Content-type", "text/html; charset=utf-8")
+            self.send_header("Content-length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
+
+        if parsed.path in ("/confidentialite", "/confidentialite.html", "/privacy"):
+            body = load_privacy()
             self.send_response(200)
             self.send_header("Content-type", "text/html; charset=utf-8")
             self.send_header("Content-length", str(len(body)))
