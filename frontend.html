@@ -887,7 +887,7 @@
           <div class="nav-pill" data-view="catalogue" onclick="showView('catalogue')">📇 Catalogue</div>
           <div class="nav-pill" data-view="formation" onclick="showView('formation')">🎓 Formation</div>
           <div class="nav-pill" data-view="excursions" onclick="showView('excursions')">🗺️ Excursions</div>
-          <div class="nav-pill" data-view="expert" onclick="showView('expert')">🎓 Expert</div>
+          <div class="nav-pill" data-view="expert" onclick="showView('expert')">🎓 Expert & Pub</div>
         </div>
 
         <div class="view active" id="view-accueil">
@@ -1083,24 +1083,28 @@
           <div id="excListe"></div>
         </div>
 
-        <!-- ===== EXPERT (candidature honnête) ===== -->
+        <!-- ===== EXPERT / CONTACT ADMIN ===== -->
         <div class="view" id="view-expert">
-          <div class="disclaimer-box">🎓 Ceci est une <b>candidature</b>, pas une certification automatique. Tes informations seront envoyées par email pour vérification manuelle. Grain d'Or n'est pas affilié à l'UAC ni à aucune université — aucun badge "certifié" n'est délivré automatiquement.</div>
+          <div class="sub-tabs">
+            <div class="sub-tab active" data-req="expert" onclick="showRequestType('expert')">🎓 Devenir Expert</div>
+            <div class="sub-tab" data-req="pub" onclick="showRequestType('pub')">📢 Demander une publicité</div>
+          </div>
+
+          <div id="expert-disclaimer" class="disclaimer-box">🎓 Ceci est une <b>candidature</b>, pas une certification automatique. Tes informations seront envoyées par email pour vérification manuelle. Grain d'Or n'est pas affilié à l'UAC ni à aucune université — aucun badge "certifié" n'est délivré automatiquement.</div>
+          <div id="pub-disclaimer" class="disclaimer-box" style="display:none;">📢 Tu souhaites qu'on mette en avant ton produit, ton service ou ton point de vente dans Grain d'Or ? Décris ta demande ci-dessous — l'admin te recontacte pour en discuter.</div>
+
           <div class="local-form">
             <input id="expNom" type="text" placeholder="Nom complet">
             <input id="expContact" type="text" placeholder="Téléphone ou WhatsApp">
-            <input id="expExp" type="text" placeholder="Années d'expérience agricole">
-            <textarea id="expNote" placeholder="Décris ton expérience, tes cultures, ta zone..."></textarea>
-            <div class="info-card" style="margin:8px 0;">
+            <input id="expExp" type="text" placeholder="Années d'expérience agricole" data-req-only="expert">
+            <textarea id="expNote" placeholder="Décris ton expérience, tes cultures, ta zone..." data-req-only="expert"></textarea>
+            <textarea id="pubNote" placeholder="Décris ce que tu veux faire connaître : produit, service, où, quand..." style="display:none;" data-req-only="pub"></textarea>
+            <div class="info-card" id="expert-pieces" style="margin:8px 0;">
               <p><b>Pièces à envoyer séparément par WhatsApp ou email</b> (jamais par ce formulaire, pour ta sécurité) : copie de ta CNI, carte professionnelle si tu en as une, une photo récente.</p>
             </div>
-            <button class="local-btn" onclick="envoyerCandidatureExpert()">Envoyer ma candidature par email</button>
+            <button class="local-btn" id="expert-submit-btn" onclick="envoyerCandidatureExpert()">Envoyer ma candidature par email</button>
           </div>
-          <div class="info-card" style="margin-top:14px;">
-            <h3>⚙️ Toi seul (Mensah)</h3>
-            <p>Ce bouton génère le code à copier-coller pour ajouter une entrée au Catalogue/Marketplace, sans écrire de JavaScript à la main.</p>
-            <button class="local-btn" onclick="openAdmin()">Générer une entrée</button>
-          </div>
+
         </div>
 
 
@@ -1275,10 +1279,10 @@ async function runReasoning(){
     data = await res.json();
     if(data.erreur) throw new Error(data.erreur);
   }catch(err){
-    // Pas de faux résultat en cas d'échec : on le dit clairement.
-    document.getElementById('s1body').textContent =
-      "⚠️ Impossible de joindre le serveur Grain d'Or (raisonnement.py). " +
-      "Vérifie que main.py tourne et que cette page est bien servie par lui, sur le même domaine.";
+    // Pas de faux résultat en cas d'échec : on le dit clairement, sans jargon technique.
+    document.getElementById('s1body').innerHTML =
+      "⚠️ Le service est momentanément indisponible. Réessaie dans un instant, ou " +
+      "<span style=\"text-decoration:underline;cursor:pointer;\" onclick=\"showView('expert')\">contacte l'admin</span>.";
     document.getElementById('step1').classList.add('active');
     document.getElementById('rootFill').style.height='20%';
     btn.disabled=false;
@@ -1393,7 +1397,7 @@ async function toggleFiche(){
       ${ravageursHtml}
     `;
   }catch(err){
-    card.innerHTML = '<div style="text-align:center;padding:10px;font-size:12px;color:var(--danger);">⚠️ Impossible de charger la fiche (serveur non joignable).</div>';
+    card.innerHTML = '<div style="text-align:center;padding:10px;font-size:12px;color:var(--danger);">⚠️ Impossible de charger la fiche pour le moment.<br><span style="text-decoration:underline;cursor:pointer;" onclick="showView(\'expert\')">Contacter l\'admin</span></div>';
     console.error(err);
   }
 }
@@ -1530,7 +1534,7 @@ async function loadInto(elId, categorie, emptyMsg){
       ? '<div class="empty-note">'+emptyMsg+'</div>'
       : renderListingCards(rows);
   }catch(err){
-    el.innerHTML = '<div class="empty-note">⚠️ Impossible de charger (connexion à la base indisponible). Réessaie plus tard.</div>';
+    el.innerHTML = '<div class="empty-note">⚠️ Impossible de charger pour le moment.<br><span style="text-decoration:underline;cursor:pointer;color:var(--leaf-dark);" onclick="showView(\'expert\')">Contacter l\'admin</span></div>';
     console.error(err);
   }
 }
@@ -1565,9 +1569,6 @@ async function renderMarketplace(){
 // dans le code source. Ça sert juste à éviter les clics accidentels,
 // pas à protéger des données sensibles.
 // ============================================================
-function openAdmin(){
-  window.location.href = '/admin';
-}
 
 
 let currentTech = 'irrigation';
@@ -1652,7 +1653,7 @@ async function ajouterForum(){
     document.getElementById('forumTexte').value = '';
     await renderForum();
   }catch(err){
-    alert("⚠️ Impossible de publier (connexion à la base indisponible). Réessaie plus tard.");
+    alert("⚠️ Ton message n'a pas pu être publié pour le moment. Réessaie dans un instant, ou contacte l'admin depuis l'onglet Expert si ça persiste.");
     console.error(err);
   }
   btn.disabled = false;
@@ -1670,7 +1671,7 @@ async function renderForum(){
       </div>
     `).join('');
   }catch(err){
-    el.innerHTML = '<div class="empty-note">⚠️ Impossible de charger le forum (connexion à la base indisponible).</div>';
+    el.innerHTML = '<div class="empty-note">⚠️ Impossible de charger le forum pour le moment.<br><span style="text-decoration:underline;cursor:pointer;color:var(--leaf-dark);" onclick="showView(\'expert\')">Contacter l\'admin</span></div>';
     console.error(err);
   }
 }
@@ -1761,21 +1762,56 @@ function renderExcursions(){
 // ============================================================
 // EXPERT — candidature honnête envoyée par email (mailto)
 // ============================================================
+let currentRequestType = 'expert';
+function showRequestType(type){
+  currentRequestType = type;
+  document.querySelectorAll('.sub-tab[data-req]').forEach(t=>t.classList.remove('active'));
+  document.querySelector('.sub-tab[data-req="'+type+'"]').classList.add('active');
+
+  const isExpert = type === 'expert';
+  document.getElementById('expert-disclaimer').style.display = isExpert ? 'block' : 'none';
+  document.getElementById('pub-disclaimer').style.display = isExpert ? 'none' : 'block';
+  document.getElementById('expert-pieces').style.display = isExpert ? 'block' : 'none';
+  document.querySelectorAll('[data-req-only="expert"]').forEach(el => el.style.display = isExpert ? '' : 'none');
+  document.querySelectorAll('[data-req-only="pub"]').forEach(el => el.style.display = isExpert ? 'none' : '');
+  document.getElementById('expert-submit-btn').textContent = isExpert
+    ? 'Envoyer ma candidature par email'
+    : 'Envoyer ma demande de publicité';
+}
+
 function envoyerCandidatureExpert(){
   const nom = document.getElementById('expNom').value.trim();
   const contact = document.getElementById('expContact').value.trim();
-  const exp = document.getElementById('expExp').value.trim();
-  const note = document.getElementById('expNote').value.trim();
   if(!nom || !contact){ alert('Merci de renseigner au moins ton nom et ton contact.'); return; }
-  const sujet = encodeURIComponent('Candidature Expert Grain d\'Or — ' + nom);
-  const corps = encodeURIComponent(
-    'Nom : ' + nom + '\n' +
-    'Contact : ' + contact + '\n' +
-    'Expérience : ' + exp + '\n\n' +
-    'Note :\n' + note + '\n\n' +
-    '(Pièces jointes à envoyer séparément par WhatsApp ou email : CNI, carte professionnelle, photo)'
-  );
-  window.location.href = 'mailto:mensahmoise12@gmail.com?subject=' + sujet + '&body=' + corps;
+
+  let sujet, corps;
+  if(currentRequestType === 'expert'){
+    const exp = document.getElementById('expExp').value.trim();
+    const note = document.getElementById('expNote').value.trim();
+    sujet = encodeURIComponent('Candidature Expert Grain d\'Or — ' + nom);
+    corps = encodeURIComponent(
+      'Nom : ' + nom + '\n' +
+      'Contact : ' + contact + '\n' +
+      'Expérience : ' + exp + '\n\n' +
+      'Note :\n' + note + '\n\n' +
+      '(Pièces jointes à envoyer séparément par WhatsApp ou email : CNI, carte professionnelle, photo)'
+    );
+  } else {
+    const note = document.getElementById('pubNote').value.trim();
+    sujet = encodeURIComponent('Demande de publicité Grain d\'Or — ' + nom);
+    corps = encodeURIComponent(
+      'Nom : ' + nom + '\n' +
+      'Contact : ' + contact + '\n\n' +
+      'Demande :\n' + note
+    );
+  }
+  const mailUrl = 'mailto:mensahmoise12@gmail.com?subject=' + sujet + '&body=' + corps;
+  const link = document.createElement('a');
+  link.href = mailUrl;
+  link.style.display = 'none';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 
 // ============================================================
