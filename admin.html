@@ -105,6 +105,7 @@
     <div class="tab" data-tab="savoirs">Savoirs & connaissances</div>
     <div class="tab" data-tab="forum">Forum</div>
     <div class="tab" data-tab="diagnostics">Diagnostics</div>
+    <div class="tab" data-tab="demandes">Demandes de vente</div>
   </div>
   <main>
     <div class="toolbar">
@@ -200,6 +201,24 @@ const TABS = {
       { key: "traitement", label: "Traitement / recommandation", type: "textarea" },
       { key: "gravite", label: "Gravité", type: "select", options: [["faible","Faible"],["moyen","Moyen"],["eleve","Élevé"],["critique","Critique"]] },
       { key: "statut", label: "Statut", type: "select", options: [["publie","Publié"],["brouillon","Brouillon"]] }
+    ]
+  },
+  demandes: {
+    table: "demandes_vente",
+    titleSingular: "demande",
+    titleField: "nom",
+    fields: [
+      { key: "nom", label: "Nom du paysan", type: "text" },
+      { key: "contact", label: "Contact", type: "text" },
+      { key: "culture", label: "Culture à vendre", type: "text" },
+      { key: "quantite", label: "Quantité estimée", type: "text" },
+      { key: "localisation", label: "Localisation", type: "text" },
+      { key: "date_disponibilite", label: "Disponible à partir de", type: "text" },
+      { key: "notes", label: "Notes du paysan", type: "textarea" },
+      { key: "notes_admin", label: "Tes notes (agent, visite, négociation...)", type: "textarea" },
+      { key: "statut", label: "Statut", type: "select", options: [
+          ["nouveau","Nouveau"], ["contacte","Contacté"], ["visite_prevue","Visite prévue"], ["conclu","Conclu"], ["annule","Annulé"]
+        ]}
     ]
   }
 };
