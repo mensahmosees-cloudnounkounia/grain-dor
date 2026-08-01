@@ -104,6 +104,7 @@
     <div class="tab" data-tab="cultures">Cultures</div>
     <div class="tab" data-tab="savoirs">Savoirs & connaissances</div>
     <div class="tab" data-tab="forum">Forum</div>
+    <div class="tab" data-tab="diagnostics">Diagnostics</div>
   </div>
   <main>
     <div class="toolbar">
@@ -185,6 +186,20 @@ const TABS = {
     fields: [
       { key: "contact", label: "Auteur", type: "text" },
       { key: "annonces", label: "Message", type: "textarea" }
+    ]
+  },
+  diagnostics: {
+    table: "diagnostics",
+    titleSingular: "diagnostic",
+    titleField: "nom_probleme",
+    fields: [
+      { key: "nom_probleme", label: "Nom (maladie/ravageur)", type: "text" },
+      { key: "culture", label: "Culture concernée", type: "text" },
+      { key: "type", label: "Type", type: "select", options: [["maladie","Maladie"],["ravageur","Ravageur"]] },
+      { key: "mots_cles", label: "Mots-clés symptômes (séparés par virgule)", type: "text" },
+      { key: "traitement", label: "Traitement / recommandation", type: "textarea" },
+      { key: "gravite", label: "Gravité", type: "select", options: [["faible","Faible"],["moyen","Moyen"],["eleve","Élevé"],["critique","Critique"]] },
+      { key: "statut", label: "Statut", type: "select", options: [["publie","Publié"],["brouillon","Brouillon"]] }
     ]
   }
 };
