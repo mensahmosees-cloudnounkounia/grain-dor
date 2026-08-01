@@ -1109,6 +1109,9 @@
 
 
       </div>
+      <div style="text-align:center; padding:10px 0 4px; font-size:11px;">
+        <a href="/confidentialite" style="color:var(--ink-soft); text-decoration:underline;">Politique de confidentialité</a>
+      </div>
     </div>
   </div>
 
@@ -1319,7 +1322,7 @@ async function runReasoning(){
       i++;
       setTimeout(nextStep, 550);
     } else {
-      showBloom({irrigation, benefice, risqueMeteo, diagnostic, plan});
+      showBloom({irrigation, benefice, risqueMeteo, diagnostic, plan}, c.fr);
       btn.disabled=false;
     }
   }
@@ -1330,7 +1333,16 @@ function fmtFcfa(n){
   return Math.round(n).toLocaleString('fr-FR').replace(/\u00A0/g,' ') + ' F';
 }
 
-function showBloom(d){
+async function fetchSavoirsCommunaute(nomCulture){
+  try{
+    const url = SUPABASE_URL + '/rest/v1/savoirs?select=*&statut=eq.publie&culture=ilike.' + encodeURIComponent('%'+nomCulture+'%');
+    const res = await fetch(url, { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY } });
+    if(!res.ok) return [];
+    return await res.json();
+  }catch(e){ return []; }
+}
+
+async function showBloom(d, nomCulture){
   const irr = d.irrigation;
   document.getElementById('rIrr').textContent = irr.action === 'stop'
     ? '0 (pluie suffisante)'
@@ -1352,12 +1364,23 @@ function showBloom(d){
   document.getElementById('bloom').classList.add('show');
 
   const savoirPanel = document.getElementById('savoirPanel');
-  const savoirs = d.diagnostic && d.diagnostic.savoir_paysan;
-  if(savoirs && savoirs.length){
-    document.getElementById('savoirSource').textContent = d.diagnostic.savoir_paysan_source || '';
-    const list = document.getElementById('savoirList');
-    list.innerHTML = savoirs.map(s => `<li>${s}</li>`).join('');
-    document.getElementById('savoirNote').textContent = d.diagnostic.savoir_paysan_note || '';
+  const savoirsJson = d.diagnostic && d.diagnostic.savoir_paysan;
+  const savoirsCommunaute = await fetchSavoirsCommunaute(nomCulture);
+
+  let html = "";
+  if(savoirsJson && savoirsJson.length){
+    if(d.diagnostic.savoir_paysan_source){ html += `<div class="savoir-source">${d.diagnostic.savoir_paysan_source}</div>`; }
+    html += '<ul class="savoir-list">' + savoirsJson.map(s => `<li>${s}</li>`).join('') + '</ul>';
+    if(d.diagnostic.savoir_paysan_note){ html += `<div class="savoir-note">${d.diagnostic.savoir_paysan_note}</div>`; }
+  }
+  if(savoirsCommunaute.length){
+    html += '<div class="savoir-head" style="margin-top:10px;">📚 Ajoutés par l\'équipe Grain d\'Or</div>';
+    html += '<ul class="savoir-list">' + savoirsCommunaute.map(s => `<li><b>${s.titre || ''}</b>${s.contenu ? ' — ' + s.contenu : ''}</li>`).join('') + '</ul>';
+  }
+
+  if(html){
+    document.getElementById('savoirList').parentElement.innerHTML =
+      '<div class="savoir-head">🌾 Savoir paysan — pratiques partagées par des agriculteurs béninois</div>' + html;
     savoirPanel.classList.add('show');
   } else {
     savoirPanel.classList.remove('show');
@@ -1386,6 +1409,16 @@ async function toggleFiche(){
       ravageursHtml += `<div class="fiche-ravageur"><b>${r.nom}</b><br>${r.traitement}</div>`;
     });
 
+    const nomCulture = CROPS[selectedCrop].fr;
+    const savoirsCommunaute = await fetchSavoirsCommunaute(nomCulture);
+    let savoirsHtml = '';
+    if(savoirsCommunaute.length){
+      savoirsHtml = '<div style="margin-top:12px;padding-top:10px;border-top:1px dashed #00000018;">' +
+        '<div style="font-weight:600;font-size:12.5px;color:var(--leaf-dark);margin-bottom:6px;">📚 Savoirs Grain d\'Or</div>' +
+        savoirsCommunaute.map(s => `<div class="fiche-ravageur"><b>${s.titre || ''}</b><br>${s.contenu || ''}</div>`).join('') +
+        '</div>';
+    }
+
     card.innerHTML = `
       <div class="fiche-row"><span class="k">Besoin en eau</span><span class="v">${d.eau_l_m2} L/m²</span></div>
       <div class="fiche-row"><span class="k">Cycle</span><span class="v">${d.cycle_jours} jours</span></div>
@@ -1395,6 +1428,7 @@ async function toggleFiche(){
       <div class="fiche-row"><span class="k">Rendement moyen</span><span class="v">${d.rendement_kg_ha.toLocaleString('fr-FR')} kg/ha</span></div>
       <div class="fiche-row"><span class="k">Prix indicatif</span><span class="v">${d.prix_fcfa_kg} F/kg</span></div>
       ${ravageursHtml}
+      ${savoirsHtml}
     `;
   }catch(err){
     card.innerHTML = '<div style="text-align:center;padding:10px;font-size:12px;color:var(--danger);">⚠️ Impossible de charger la fiche pour le moment.<br><span style="text-decoration:underline;cursor:pointer;" onclick="showView(\'expert\')">Contacter l\'admin</span></div>';
@@ -1965,3 +1999,4 @@ buildSoil();
 </script>
 </body>
 </html>
+
