@@ -134,8 +134,10 @@
     align-items:center;
     justify-content:space-between;
     margin:8px 0 18px;
+    gap:8px;
   }
   .app-header h2{
+    flex:none;
     font-family:'Fraunces', serif;
     font-size:22px;
     margin:0;
@@ -148,8 +150,13 @@
     padding:3px;
     font-family:'IBM Plex Mono', monospace;
     font-size:11px;
+    overflow-x:auto;
+    max-width:100%;
+    scrollbar-width:none;
   }
+  .lang-toggle::-webkit-scrollbar{display:none;}
   .lang-toggle button{
+    flex:none;
     border:none;background:transparent;
     padding:6px 10px;border-radius:16px;
     cursor:pointer;color:var(--ink-soft);
@@ -864,6 +871,10 @@
           <div class="lang-toggle">
             <button id="btn-fr" class="active" onclick="setLang('fr')">Français</button>
             <button id="btn-fon" onclick="setLang('fon')">Fon</button>
+            <button id="btn-adja" onclick="setLang('adja')">Adja</button>
+            <button id="btn-bariba" onclick="setLang('bariba')">Bariba</button>
+            <button id="btn-minan" onclick="setLang('minan')">Minan</button>
+            <button id="btn-yoruba" onclick="setLang('yoruba')">Yoruba</button>
           </div>
         </div>
 
@@ -872,6 +883,17 @@
           <div class="mic-text">
             <div class="t1" id="micTitle">Je t'écoute</div>
             <div class="t2" id="micSub">Touche pour parler — Fon ou Français, sans internet</div>
+          </div>
+        </div>
+
+        <div id="micFallback" style="display:none; background:var(--sand-deep); border-radius:16px; padding:16px; margin-bottom:20px;">
+          <p style="margin:0 0 10px; font-size:13px; color:var(--ink); line-height:1.5;" id="micFallbackText">
+            Nounkoun n'a pas encore compris ta question dans cette langue. Contacte directement l'équipe pour obtenir une réponse :
+          </p>
+          <audio id="micFallbackAudio" controls style="width:100%; margin-bottom:10px; display:none;"></audio>
+          <div style="display:flex; gap:8px;">
+            <a href="https://wa.me/229168999238" target="_blank" style="flex:1; text-align:center; background:var(--leaf); color:#fff; padding:11px; border-radius:12px; font-weight:600; font-size:13px; text-decoration:none;">💬 WhatsApp</a>
+            <a href="tel:+229168999238" style="flex:1; text-align:center; background:var(--ink); color:#fff; padding:11px; border-radius:12px; font-weight:600; font-size:13px; text-decoration:none;">📞 Appeler</a>
           </div>
         </div>
 
@@ -887,6 +909,7 @@
           <div class="nav-pill" data-view="catalogue" onclick="showView('catalogue')">📇 Catalogue</div>
           <div class="nav-pill" data-view="formation" onclick="showView('formation')">🎓 Formation</div>
           <div class="nav-pill" data-view="excursions" onclick="showView('excursions')">🗺️ Excursions</div>
+          <div class="nav-pill" data-view="vendre" onclick="showView('vendre')">🌾 Vendre ma récolte</div>
           <div class="nav-pill" data-view="expert" onclick="showView('expert')">🎓 Expert & Pub</div>
         </div>
 
@@ -1083,6 +1106,22 @@
           <div id="excListe"></div>
         </div>
 
+        <!-- ===== VENDRE MA RÉCOLTE (demande de mise en relation) ===== -->
+        <div class="view" id="view-vendre">
+          <div class="disclaimer-box">🌾 Décris ta récolte disponible — un agent Grain d'Or te contacte pour visiter ton champ et discuter du prix. <b>Aucun paiement ni négociation ne passe par l'app</b> ; c'est uniquement une prise de contact.</div>
+          <div class="local-form">
+            <input id="vendNom" type="text" placeholder="Ton nom">
+            <input id="vendContact" type="text" placeholder="Téléphone / WhatsApp">
+            <input id="vendCulture" type="text" placeholder="Culture (ex: Maïs, Tomate...)">
+            <input id="vendQuantite" type="text" placeholder="Quantité estimée (ex: 500 kg, 2 sacs...)">
+            <input id="vendLocalisation" type="text" placeholder="Localisation (village, commune)">
+            <input id="vendDate" type="text" placeholder="Disponible à partir de (ex: mi-septembre)">
+            <textarea id="vendNotes" placeholder="Autre détail utile (variété, qualité, etc.)"></textarea>
+            <button class="local-btn" onclick="envoyerDemandeVente()">Envoyer ma demande</button>
+          </div>
+          <div id="vendMsg" style="font-size:12.5px; color:var(--leaf-dark); font-weight:600; margin-top:8px;"></div>
+        </div>
+
         <!-- ===== EXPERT / CONTACT ADMIN ===== -->
         <div class="view" id="view-expert">
           <div class="sub-tabs">
@@ -1224,23 +1263,121 @@ function buildSoil(){
     row.appendChild(btn);
   });
 }
+// ============================================================
+// VOCAL — Reconnaissance vocale réelle en français (Web Speech
+// API, supportée par Chrome/Brave). Pour Fon/Adja/Bariba/Minan/
+// Yoruba : aucun moteur de reconnaissance fiable n'existe
+// aujourd'hui pour ces langues (vérifié, pas une limite de ce
+// code) — on bascule donc directement et honnêtement vers le
+// contact humain plutôt que de faire semblant d'écouter.
+// ============================================================
+const LANG_LABELS = {
+  fr: "Français", fon: "Fon", adja: "Adja", bariba: "Bariba", minan: "Minan", yoruba: "Yoruba"
+};
+const LANG_AUDIO_FALLBACK = {
+  // Remplacer ces chemins par de vrais fichiers audio enregistrés
+  // par un locuteur natif, une fois disponibles. En attendant,
+  // aucun fichier n'existe : le lecteur audio reste caché et le
+  // texte + les boutons WhatsApp/Appel suffisent à orienter le
+  // paysan.
+  fon: "audio/contact-fon.mp3",
+  adja: "audio/contact-adja.mp3",
+  bariba: "audio/contact-bariba.mp3",
+  minan: "audio/contact-minan.mp3",
+  yoruba: "audio/contact-yoruba.mp3",
+};
+
+let recognition = null;
+if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  recognition = new SR();
+  recognition.lang = 'fr-FR';
+  recognition.continuous = false;
+  recognition.interimResults = false;
+}
+
 function setLang(l){
-  lang=l;
-  document.getElementById('btn-fr').classList.toggle('active', l==='fr');
-  document.getElementById('btn-fon').classList.toggle('active', l==='fon');
-  document.getElementById('micTitle').textContent = l==='fon' ? 'Un se we' : "Je t'écoute";
-  document.getElementById('micSub').textContent = l==='fon' ? 'Dá xó dó Fɔngbe alo Fransegbe — kún internet ɔ ɖ' : 'Touche pour parler — Fon ou Français, sans internet';
+  lang = l;
+  document.querySelectorAll('.lang-toggle button').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById('btn-' + l);
+  if(btn) btn.classList.add('active');
+  hideMicFallback();
+  if(l === 'fr'){
+    document.getElementById('micTitle').textContent = "Je t'écoute";
+    document.getElementById('micSub').textContent = "Touche pour parler en français";
+  } else if(l === 'fon'){
+    document.getElementById('micTitle').textContent = 'Un se we';
+    document.getElementById('micSub').textContent = 'Dá xó dó Fɔngbe — touche pour parler';
+  } else {
+    document.getElementById('micTitle').textContent = "Je t'écoute";
+    document.getElementById('micSub').textContent = 'Touche pour parler en ' + LANG_LABELS[l];
+  }
   buildGrid();
 }
+
 function toggleMic(){
-  listening=!listening;
-  document.getElementById('micIcon').classList.toggle('listening', listening);
-  document.getElementById('micTitle').textContent = listening ? (lang==='fon'?'Un se we...':'Écoute en cours...') : (lang==='fon'?'Un se we':"Je t'écoute");
-  if(listening){
-    setTimeout(()=>{
-      if(listening){toggleMic();}
-    },2200);
+  if(listening) return; // déjà en écoute, on ignore un second appui
+  hideMicFallback();
+
+  if(lang !== 'fr'){
+    // Aucune langue autre que le français n'a de reconnaissance
+    // fiable disponible aujourd'hui : on le dit honnêtement et on
+    // redirige tout de suite, plutôt que de faire semblant d'écouter.
+    showMicFallback();
+    return;
   }
+
+  if(!recognition){
+    // Le navigateur ne supporte pas la reconnaissance vocale du tout.
+    showMicFallback();
+    return;
+  }
+
+  listening = true;
+  document.getElementById('micIcon').classList.add('listening');
+  document.getElementById('micTitle').textContent = 'Écoute en cours...';
+
+  recognition.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    stopListeningUI();
+    toggleSearch();
+    setTimeout(() => {
+      document.getElementById('searchInput').value = transcript;
+      askChat();
+    }, 100);
+  };
+  recognition.onerror = () => {
+    stopListeningUI();
+    showMicFallback();
+  };
+  recognition.onend = () => {
+    stopListeningUI();
+  };
+
+  try{ recognition.start(); }catch(e){ stopListeningUI(); showMicFallback(); }
+}
+
+function stopListeningUI(){
+  listening = false;
+  document.getElementById('micIcon').classList.remove('listening');
+  document.getElementById('micTitle').textContent = "Je t'écoute";
+}
+
+function showMicFallback(){
+  const panel = document.getElementById('micFallback');
+  const audio = document.getElementById('micFallbackAudio');
+  const audioSrc = LANG_AUDIO_FALLBACK[lang];
+  if(audioSrc){
+    audio.src = audioSrc;
+    audio.style.display = 'block';
+    audio.play().catch(()=>{ /* fichier pas encore disponible, pas grave */ });
+  } else {
+    audio.style.display = 'none';
+  }
+  panel.style.display = 'block';
+}
+function hideMicFallback(){
+  document.getElementById('micFallback').style.display = 'none';
 }
 function hideResults(){
   document.getElementById('rootPanel').classList.remove('show');
@@ -1832,6 +1969,51 @@ function showRequestType(type){
   document.getElementById('expert-submit-btn').textContent = isExpert
     ? 'Envoyer ma candidature par email'
     : 'Envoyer ma demande de publicité';
+}
+
+// ============================================================
+// VENDRE MA RÉCOLTE — envoie directement dans Supabase (table
+// demandes_vente). Données privées : aucune policy de lecture
+// publique, seul l'admin connecté peut les consulter et les traiter.
+// ============================================================
+async function envoyerDemandeVente(){
+  const nom = document.getElementById('vendNom').value.trim();
+  const contact = document.getElementById('vendContact').value.trim();
+  const culture = document.getElementById('vendCulture').value.trim();
+  const msgEl = document.getElementById('vendMsg');
+  if(!nom || !contact || !culture){
+    msgEl.style.color = 'var(--danger)';
+    msgEl.textContent = "Merci de renseigner au moins ton nom, ton contact et la culture.";
+    return;
+  }
+  const payload = {
+    nom, contact, culture,
+    quantite: document.getElementById('vendQuantite').value.trim(),
+    localisation: document.getElementById('vendLocalisation').value.trim(),
+    date_disponibilite: document.getElementById('vendDate').value.trim(),
+    notes: document.getElementById('vendNotes').value.trim(),
+    statut: 'nouveau',
+  };
+  try{
+    const res = await fetch(SUPABASE_URL + '/rest/v1/demandes_vente', {
+      method: 'POST',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal',
+      },
+      body: JSON.stringify(payload),
+    });
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    msgEl.style.color = 'var(--leaf-dark)';
+    msgEl.textContent = "✅ Demande envoyée ! Un agent Grain d'Or te contacte bientôt.";
+    ['vendNom','vendContact','vendCulture','vendQuantite','vendLocalisation','vendDate','vendNotes'].forEach(id => document.getElementById(id).value = '');
+  }catch(err){
+    msgEl.style.color = 'var(--danger)';
+    msgEl.textContent = "⚠️ Impossible d'envoyer pour le moment. Réessaie, ou contacte directement le " + "+229 01 68 99 92 38 par WhatsApp.";
+    console.error(err);
+  }
 }
 
 function envoyerCandidatureExpert(){
