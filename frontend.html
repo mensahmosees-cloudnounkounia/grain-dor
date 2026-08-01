@@ -1322,7 +1322,7 @@ async function runReasoning(){
       i++;
       setTimeout(nextStep, 550);
     } else {
-      showBloom({irrigation, benefice, risqueMeteo, diagnostic, plan}, c.fr);
+      showBloom({irrigation, benefice, risqueMeteo, diagnostic, plan}, c.fr, sympt);
       btn.disabled=false;
     }
   }
@@ -1342,7 +1342,21 @@ async function fetchSavoirsCommunaute(nomCulture){
   }catch(e){ return []; }
 }
 
-async function showBloom(d, nomCulture){
+async function fetchDiagnosticsAdmin(nomCulture, sympt){
+  try{
+    const url = SUPABASE_URL + '/rest/v1/diagnostics?select=*&statut=eq.publie&culture=ilike.' + encodeURIComponent('%'+nomCulture+'%');
+    const res = await fetch(url, { headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': 'Bearer ' + SUPABASE_ANON_KEY } });
+    if(!res.ok) return [];
+    const rows = await res.json();
+    const texte = normalize(sympt || '');
+    if(!texte) return rows; // pas de symptôme précisé : on montre tout ce qui existe pour la culture
+    return rows.filter(r => (r.mots_cles || '').split(',').some(mc => texte.includes(normalize(mc.trim())) && mc.trim().length > 0));
+  }catch(e){ return []; }
+}
+
+const GRAVITE_LABELS = { faible:'Faible', moyen:'Moyen', eleve:'Élevé', critique:'Critique' };
+
+async function showBloom(d, nomCulture, sympt){
   const irr = d.irrigation;
   document.getElementById('rIrr').textContent = irr.action === 'stop'
     ? '0 (pluie suffisante)'
@@ -1366,12 +1380,19 @@ async function showBloom(d, nomCulture){
   const savoirPanel = document.getElementById('savoirPanel');
   const savoirsJson = d.diagnostic && d.diagnostic.savoir_paysan;
   const savoirsCommunaute = await fetchSavoirsCommunaute(nomCulture);
+  const diagnosticsAdmin = sympt && sympt.trim() ? await fetchDiagnosticsAdmin(nomCulture, sympt) : [];
 
   let html = "";
   if(savoirsJson && savoirsJson.length){
     if(d.diagnostic.savoir_paysan_source){ html += `<div class="savoir-source">${d.diagnostic.savoir_paysan_source}</div>`; }
     html += '<ul class="savoir-list">' + savoirsJson.map(s => `<li>${s}</li>`).join('') + '</ul>';
     if(d.diagnostic.savoir_paysan_note){ html += `<div class="savoir-note">${d.diagnostic.savoir_paysan_note}</div>`; }
+  }
+  if(diagnosticsAdmin.length){
+    html += '<div class="savoir-head" style="margin-top:10px;">🔎 Autres pistes possibles</div>';
+    html += '<ul class="savoir-list">' + diagnosticsAdmin.map(r =>
+      `<li><b>${r.nom_probleme || ''}</b> (${GRAVITE_LABELS[r.gravite] || r.gravite || ''})${r.traitement ? ' — ' + r.traitement : ''}</li>`
+    ).join('') + '</ul>';
   }
   if(savoirsCommunaute.length){
     html += '<div class="savoir-head" style="margin-top:10px;">📚 Ajoutés par l\'équipe Grain d\'Or</div>';
@@ -1999,4 +2020,3 @@ buildSoil();
 </script>
 </body>
 </html>
-
