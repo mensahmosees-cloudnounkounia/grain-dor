@@ -103,6 +103,7 @@
     <div class="tab active" data-tab="annonces">Annonces</div>
     <div class="tab" data-tab="cultures">Cultures</div>
     <div class="tab" data-tab="savoirs">Savoirs & connaissances</div>
+    <div class="tab" data-tab="forum">Forum</div>
   </div>
   <main>
     <div class="toolbar">
@@ -130,7 +131,7 @@
 <script>
 const SUPABASE_URL = "https://vmhilaqkuydgdelxnmaa.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZtaGlsYXFrdXlkZ2RlbHhubWFhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUzODEwMDUsImV4cCI6MjEwMDk1NzAwNX0.F6Jt6LzMiUPgAJIsou_81J-xZGaQ9dmgKOPcjjwCUSQ";
-const BUCKET_NAME = "photo";
+const BUCKET_NAME = "photos";
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const TABS = {
@@ -173,6 +174,17 @@ const TABS = {
           ["technique","Technique de culture"], ["maladie","Maladie / ravageur"], ["calendrier","Calendrier"], ["conseil","Conseil général"]
         ]},
       { key: "statut", label: "Statut", type: "select", options: [["publie","Publié"],["brouillon","Brouillon"]] }
+    ]
+  },
+  forum: {
+    table: "Grain D'or",
+    titleSingular: "message",
+    titleField: "contact",
+    readOnly: true,
+    filter: row => row.categorie === 'forum',
+    fields: [
+      { key: "contact", label: "Auteur", type: "text" },
+      { key: "annonces", label: "Message", type: "textarea" }
     ]
   }
 };
@@ -229,6 +241,7 @@ document.querySelectorAll('.tab').forEach(tabEl => {
     tabEl.classList.add('active');
     currentTab = tabEl.dataset.tab;
     tabTitle.textContent = tabEl.textContent;
+    newBtn.style.display = TABS[currentTab].readOnly ? 'none' : '';
     loadList();
   });
 });
@@ -240,10 +253,11 @@ async function loadList(){
   listEl.innerHTML = "";
   const { data, error } = await sb.from(cfg.table).select('*').order('created_at', { ascending: false });
   if(error){ listEl.innerHTML = `<div class="empty-state">Erreur de chargement : ${escapeHtml(error.message)}</div>`; return; }
-  if(!data || data.length === 0){ emptyState.style.display = 'block'; return; }
+  const filtered = cfg.filter ? (data || []).filter(cfg.filter) : (data || []);
+  if(filtered.length === 0){ emptyState.style.display = 'block'; return; }
   emptyState.style.display = 'none';
 
-  data.forEach(row => {
+  filtered.forEach(row => {
     const imgField = cfg.fields.find(f => f.type === 'image');
     const photoUrl = imgField ? row[imgField.key] : null;
     const secondaryField = cfg.fields.find(f => f.key !== cfg.titleField && f.type !== 'image' && f.type !== 'textarea');
@@ -262,12 +276,12 @@ async function loadList(){
         <div class="card-desc">${descField ? escapeHtml(row[descField.key] || '') : ''}</div>
         ${row.created_at ? `<div style="font-size:11px;color:var(--gold-dim);margin-top:6px;">${new Date(row.created_at).toLocaleDateString('fr-FR')}</div>` : ''}
         <div class="card-actions">
-          <button data-action="edit">Modifier</button>
+          ${cfg.readOnly ? '' : '<button data-action="edit">Modifier</button>'}
           <button data-action="delete" class="danger">Supprimer</button>
         </div>
       </div>`;
     listEl.appendChild(card);
-    card.querySelector('[data-action="edit"]').addEventListener('click', () => openEdit(row));
+    if(!cfg.readOnly) card.querySelector('[data-action="edit"]').addEventListener('click', () => openEdit(row));
     card.querySelector('[data-action="delete"]').addEventListener('click', () => deleteRow(row.id));
   });
 }
